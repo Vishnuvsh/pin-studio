@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest Pin Studio - Creator Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f2f5 100%);
+        }
+        .bg-pinterest {
+            background-color: #E60023;
+        }
+        .bg-pinterest:hover {
+            background-color: #ad081b;
+        }
+        .text-pinterest {
+            color: #E60023;
+        }
+        .border-pinterest {
+            border-color: #E60023;
+        }
+        /* Canvas grabbing styles */
+        .cursor-grab {
+            cursor: grab;
+        }
+        .cursor-grabbing {
+            cursor: grabbing;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 p-4 sm:p-6 md:p-10 flex flex-col items-center justify-center">
+
+    <!-- Header & App Bar -->
+    <header class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-50 text-pinterest mb-2 shadow-sm">
+            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.182 0 7.439 2.982 7.439 6.969 0 4.156-2.62 7.502-6.262 7.502-1.222 0-2.373-.635-2.766-1.386l-.754 2.871c-.272 1.039-.997 2.34-1.488 3.136 1.144.348 2.355.535 3.606.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.608 0 12.017 0z"/>
+            </svg>
+        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">Pinterest Pin Studio</h1>
+        <p class="text-sm text-gray-500 mt-1 max-w-md mx-auto">
+            Upload an image for instant 2:3 Pinterest Pin sizing. Everything else is completely optional!
+        </p>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="w-full max-w-5xl bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-300">
+        
+        <!-- STEP 1: Upload Dropzone (Visible when no image or user wants to re-upload) -->
+        <section id="uploadSection" class="p-8 sm:p-12 text-center">
+            <div class="relative border-2 border-dashed border-gray-300 hover:border-red-400 rounded-3xl p-8 sm:p-14 bg-gray-50/60 hover:bg-red-50/30 transition duration-200 cursor-pointer group flex flex-col items-center justify-center max-w-xl mx-auto">
+                <input type="file" id="imageInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+                <div class="w-16 h-16 mb-4 rounded-2xl bg-white shadow-sm flex items-center justify-center text-gray-400 group-hover:text-pinterest group-hover:scale-110 transition-all">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-700 group-hover:text-gray-900 mb-1">
+                    Choose an image or drag & drop
+                </h3>
+                <p class="text-xs text-gray-400">JPG, PNG, WebP up to 25MB • Auto-sizes to 2:3 ratio</p>
+            </div>
+        </section>
+
+        <!-- STEP 2: Studio Editor & Preview Layout (Shown after image load) -->
+        <section id="studioSection" class="hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
+            
+            <!-- LEFT PANEL: Pin Preview & Fast 1-Click Download -->
+            <div class="lg:col-span-5 p-6 sm:p-8 bg-gray-50/50 flex flex-col items-center justify-between">
+                <div class="w-full flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-xs font-semibold text-gray-600 tracking-wide uppercase">Pin Preview</span>
+                    </div>
+                    <label for="imageInputSecondary" class="text-xs text-pinterest font-medium hover:underline cursor-pointer flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Change Photo
+                    </label>
+                    <input type="file" id="imageInputSecondary" accept="image/*" class="hidden">
+                </div>
+
+                <!-- Live Canvas Display -->
+                <div class="relative w-full flex flex-col items-center my-auto">
+                    <div class="relative group rounded-2xl overflow-hidden shadow-2xl bg-neutral-900 border border-gray-200">
+                        <!-- Canvas -->
+                        <canvas id="pinCanvas" class="cursor-grab active:cursor-grabbing block transition-transform" style="max-height: 480px; width: auto; object-fit: contain;"></canvas>
+                        
+                        <!-- Drag hint overlay badge -->
+                        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md text-white text-[10px] font-medium px-3 py-1 rounded-full opacity-80 pointer-events-none transition flex items-center gap-1 whitespace-nowrap">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11"/></svg>
+                            Drag to reposition image
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mt-3 text-center" id="aspectRatioLabel">Pinterest Standard (1000 × 1500px • 2:3)</p>
+                </div>
+
+                <!-- Instant Download Section -->
+                <div class="w-full mt-6 space-y-2">
+                    <button id="downloadBtn" class="bg-pinterest text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all w-full flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        <span>Download Pin</span>
+                    </button>
+                    <p class="text-[11px] text-center text-gray-400">High-Resolution Ready • Ready to post right away</p>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: Progressive Disclosure Customization Tools (Optional) -->
+            <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between">
+                <div>
+                    <!-- Section Title & Subhead -->
+                    <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                <span>✨ Customize Pin</span>
+                                <span class="bg-gray-100 text-gray-600 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">Optional</span>
+                            </h2>
+                            <p class="text-xs text-gray-500">Tune framing, typography, or color tones if desired.</p>
+                        </div>
+                        <button id="resetAllBtn" class="text-xs text-gray-400 hover:text-gray-700 font-medium transition">
+                            Reset All
+                        </button>
+                    </div>
+
+                    <!-- Accordion / Control Groups -->
+                    <div class="space-y-4 max-h-[520px] overflow-y-auto pr-1">
+
+                        <!-- TOOL 1: Ratio & Framing -->
+                        <div class="border border-gray-200/80 rounded-2xl p-4 bg-white hover:border-gray-300 transition">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                                    <span>📐</span> Canvas & Aspect Ratio
+                                </label>
+                            </div>
+                            
+                            <!-- Ratio Selector -->
+                            <div class="grid grid-cols-3 gap-2 mb-4">
+                                <button type="button" data-ratio="2:3" class="ratio-btn border-2 border-pinterest bg-red-50/50 text-pinterest font-semibold text-xs py-2 rounded-xl text-center transition">
+                                    Pinterest Pin<br><span class="text-[10px] font-normal opacity-75">2:3 (1000×1500)</span>
+                                </button>
+                                <button type="button" data-ratio="9:16" class="ratio-btn border border-gray-200 text-gray-600 hover:border-gray-300 font-semibold text-xs py-2 rounded-xl text-center transition">
+                                    Story / Reels<br><span class="text-[10px] font-normal opacity-75">9:16 (1080×1920)</span>
+                                </button>
+                                <button type="button" data-ratio="1:1" class="ratio-btn border border-gray-200 text-gray-600 hover:border-gray-300 font-semibold text-xs py-2 rounded-xl text-center transition">
+                                    Square Post<br><span class="text-[10px] font-normal opacity-75">1:1 (1080×1080)</span>
+                                </button>
+                            </div>
+
+                            <!-- Fit Style (Cover vs Blur Background) -->
+                            <div class="space-y-3 pt-3 border-t border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-700">Display Mode</span>
+                                    <div class="flex gap-1 bg-gray-100 p-0.5 rounded-lg text-xs">
+                                        <button id="modeCover" class="px-3 py-1 font-semibold rounded-md bg-white shadow-sm text-gray-800">Crop to Fill</button>
+                                        <button id="modeBlur" class="px-3 py-1 font-medium rounded-md text-gray-500 hover:text-gray-900">Blur Backdrop</button>
+                                    </div>
+                                </div>
+
+                                <!-- Zoom & Reset Pan -->
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-medium text-gray-500 whitespace-nowrap">Zoom</span>
+                                    <input type="range" id="zoomSlider" min="1" max="2.5" step="0.05" value="1" class="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600">
+                                    <button id="resetPanBtn" title="Center Image" class="text-xs text-gray-400 hover:text-gray-700 px-2 py-1 bg-gray-100 rounded-md">Center</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 2: Typography & Viral Text Hook (OPT-IN TOGGLE) -->
+                        <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
+                            <div class="flex items-center justify-between">
+                                <label for="enableTextToggle" class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                    <span>✍️</span> Add Text & Headline
+                                </label>
+                                <input type="checkbox" id="enableTextToggle" class="w-4 h-4 text-pinterest rounded border-gray-300 focus:ring-red-400 cursor-pointer">
+                            </div>
+
+                            <!-- Collapsible Content -->
+                            <div id="textControls" class="hidden mt-4 pt-3 border-t border-gray-100 space-y-3">
+                                <div>
+                                    <label class="text-[11px] font-semibold text-gray-600 block mb-1">Main Headline</label>
+                                    <input type="text" id="headlineInput" placeholder="e.g., 10 Ideas That Will Change Your Morning" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-semibold text-gray-600 block mb-1">Sub-headline / Tagline</label>
+                                    <input type="text" id="subheadlineInput" placeholder="e.g., Easy step-by-step aesthetic routine" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Font Family</label>
+                                        <select id="fontSelect" class="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                            <option value="'Playfair Display', serif">Luxury Serif (Playfair)</option>
+                                            <option value="'Plus Jakarta Sans', sans-serif">Modern Bold (Jakarta)</option>
+                                            <option value="'Inter', sans-serif">Clean Minimal (Inter)</option>
+                                            <option value="'Dancing Script', cursive">Handwritten Script</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Position</label>
+                                        <select id="textPosSelect" class="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                            <option value="bottom">Bottom Overlay</option>
+                                            <option value="center">Center Focus</option>
+                                            <option value="top">Top Header</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-1">
+                                    <label class="text-xs text-gray-600 flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="scrimToggle" checked class="w-3.5 h-3.5 text-pinterest rounded border-gray-300">
+                                        <span>Dark gradient shadow (for text readability)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 3: Aesthetic Filters (OPTIONAL) -->
+                        <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
+                            <label class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 mb-3">
+                                <span>🎨</span> Aesthetic Filter
+                            </label>
+                            <div class="grid grid-cols-5 gap-1.5">
+                                <button type="button" data-filter="none" class="filter-btn text-[11px] py-1.5 rounded-lg border-2 border-pinterest bg-red-50 text-pinterest font-medium text-center">Original</button>
+                                <button type="button" data-filter="warm" class="filter-btn text-[11px] py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 font-medium text-center">Warm</button>
+                                <button type="button" data-filter="vibrant" class="filter-btn text-[11px] py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 font-medium text-center">Vibrant</button>
+                                <button type="button" data-filter="moody" class="filter-btn text-[11px] py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 font-medium text-center">Moody</button>
+                                <button type="button" data-filter="bw" class="filter-btn text-[11px] py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 font-medium text-center">B & W</button>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 4: Brand Badge & Watermark (OPT-IN TOGGLE) -->
+                        <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
+                            <div class="flex items-center justify-between">
+                                <label for="enableBrandingToggle" class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                    <span>🏷️</span> Badge & Website Watermark
+                                </label>
+                                <input type="checkbox" id="enableBrandingToggle" class="w-4 h-4 text-pinterest rounded border-gray-300 focus:ring-red-400 cursor-pointer">
+                            </div>
+
+                            <div id="brandingControls" class="hidden mt-4 pt-3 border-t border-gray-100 space-y-3">
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Badge Tag</label>
+                                        <input type="text" id="badgeInput" placeholder="e.g. MUST TRY, NEW" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 uppercase">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Website or Handle</label>
+                                        <input type="text" id="watermarkInput" placeholder="e.g. yoursite.com" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Footer Tip -->
+                <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                    <span>💡 Tip: Leave text & badge unchecked for pure clean photo pins.</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JavaScript Engine -->
+    <script>
+        // DOM Elements
+        const imageInput = document.getElementById('imageInput');
+        const imageInputSecondary = document.getElementById('imageInputSecondary');
+        const uploadSection = document.getElementById('uploadSection');
+        const studioSection = document.getElementById('studioSection');
+        const canvas = document.getElementById('pinCanvas');
+        const ctx = canvas.getContext('2d');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const aspectRatioLabel = document.getElementById('aspectRatioLabel');
+
+        // Framing & Zoom Controls
+        const zoomSlider = document.getElementById('zoomSlider');
+        const resetPanBtn = document.getElementById('resetPanBtn');
+        const modeCoverBtn = document.getElementById('modeCover');
+        const modeBlurBtn = document.getElementById('modeBlur');
+        const ratioBtns = document.querySelectorAll('.ratio-btn');
+
+        // Text & Branding Controls
+        const enableTextToggle = document.getElementById('enableTextToggle');
+        const textControls = document.getElementById('textControls');
+        const headlineInput = document.getElementById('headlineInput');
+        const subheadlineInput = document.getElementById('subheadlineInput');
+        const fontSelect = document.getElementById('fontSelect');
+        const textPosSelect = document.getElementById('textPosSelect');
+        const scrimToggle = document.getElementById('scrimToggle');
+
+        // Filter Controls
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // Branding Controls
+        const enableBrandingToggle = document.getElementById('enableBrandingToggle');
+        const brandingControls = document.getElementById('brandingControls');
+        const badgeInput = document.getElementById('badgeInput');
+        const watermarkInput = document.getElementById('watermarkInput');
+        const resetAllBtn = document.getElementById('resetAllBtn');
+
+        // State Machine
+        let uploadedImg = null;
+        let config = {
+            width: 1000,
+            height: 1500,
+            ratioLabel: '2:3 (1000 × 1500px)',
+            fitMode: 'cover', // 'cover' or 'blur'
+            zoom: 1.0,
+            panX: 0,
+            panY: 0,
+            filter: 'none',
+            // Text Layer
+            hasText: false,
+            headline: '',
+            subheadline: '',
+            font: "'Playfair Display', serif",
+            textPosition: 'bottom',
+            hasScrim: true,
+            // Branding Layer
+            hasBranding: false,
+            badge: '',
+            watermark: ''
+        };
+
+        // Initialize Canvas Size
+        canvas.width = config.width;
+        canvas.height = config.height;
+
+        // --- File Upload Listeners ---
+        [imageInput, imageInputSecondary].forEach(input => {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) handleImageFile(file);
+            });
+        });
+
+        // Drag & Drop onto Upload Section
+        uploadSection.addEventListener('dragover', (e) => { e.preventDefault(); });
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handleImageFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleImageFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    uploadedImg = img;
+                    // Reset pan offsets for fresh image
+                    config.panX = 0;
+                    config.panY = 0;
+                    config.zoom = 1.0;
+                    zoomSlider.value = 1.0;
+
+                    uploadSection.classList.add('hidden');
+                    studioSection.classList.remove('hidden');
+                    render();
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // --- Aspect Ratio Buttons ---
+        ratioBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                ratioBtns.forEach(b => {
+                    b.classList.remove('border-pinterest', 'bg-red-50/50', 'text-pinterest');
+                    b.classList.add('border-gray-200', 'text-gray-600');
+                });
+                btn.classList.add('border-pinterest', 'bg-red-50/50', 'text-pinterest');
+                btn.classList.remove('border-gray-200', 'text-gray-600');
+
+                const ratio = btn.dataset.ratio;
+                if (ratio === '2:3') {
+                    config.width = 1000;
+                    config.height = 1500;
+                    config.ratioLabel = 'Pinterest Standard (1000 × 1500px • 2:3)';
+                } else if (ratio === '9:16') {
+                    config.width = 1080;
+                    config.height = 1920;
+                    config.ratioLabel = 'Story / Reels (1080 × 1920px • 9:16)';
+                } else if (ratio === '1:1') {
+                    config.width = 1080;
+                    config.height = 1080;
+                    config.ratioLabel = 'Square Post (1080 × 1080px • 1:1)';
+                }
+                canvas.width = config.width;
+                canvas.height = config.height;
+                aspectRatioLabel.textContent = config.ratioLabel;
+                render();
+            });
+        });
+
+        // --- Fit Mode (Cover vs Blur) ---
+        modeCoverBtn.addEventListener('click', () => {
+            config.fitMode = 'cover';
+            modeCoverBtn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
+            modeCoverBtn.classList.remove('text-gray-500');
+            modeBlurBtn.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
+            modeBlurBtn.classList.add('text-gray-500');
+            render();
+        });
+
+        modeBlurBtn.addEventListener('click', () => {
+            config.fitMode = 'blur';
+            modeBlurBtn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
+            modeBlurBtn.classList.remove('text-gray-500');
+            modeCoverBtn.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
+            modeCoverBtn.classList.add('text-gray-500');
+            render();
+        });
+
+        // --- Zoom & Pan Slider ---
+        zoomSlider.addEventListener('input', (e) => {
+            config.zoom = parseFloat(e.target.value);
+            render();
+        });
+
+        resetPanBtn.addEventListener('click', () => {
+            config.panX = 0;
+            config.panY = 0;
+            config.zoom = 1.0;
+            zoomSlider.value = 1.0;
+            render();
+        });
+
+        // --- Filter Buttons ---
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('border-2', 'border-pinterest', 'bg-red-50', 'text-pinterest');
+                    b.classList.add('border', 'border-gray-200', 'text-gray-600');
+                });
+                btn.classList.add('border-2', 'border-pinterest', 'bg-red-50', 'text-pinterest');
+                btn.classList.remove('border', 'border-gray-200', 'text-gray-600');
+                config.filter = btn.dataset.filter;
+                render();
+            });
+        });
+
+        // --- Optional Text Layer Toggle ---
+        enableTextToggle.addEventListener('change', (e) => {
+            config.hasText = e.target.checked;
+            textControls.classList.toggle('hidden', !config.hasText);
+            render();
+        });
+
+        headlineInput.addEventListener('input', (e) => { config.headline = e.target.value; render(); });
+        subheadlineInput.addEventListener('input', (e) => { config.subheadline = e.target.value; render(); });
+        fontSelect.addEventListener('change', (e) => { config.font = e.target.value; render(); });
+        textPosSelect.addEventListener('change', (e) => { config.textPosition = e.target.value; render(); });
+        scrimToggle.addEventListener('change', (e) => { config.hasScrim = e.target.checked; render(); });
+
+        // --- Optional Branding Layer Toggle ---
+        enableBrandingToggle.addEventListener('change', (e) => {
+            config.hasBranding = e.target.checked;
+            brandingControls.classList.toggle('hidden', !config.hasBranding);
+            render();
+        });
+
+        badgeInput.addEventListener('input', (e) => { config.badge = e.target.value.trim(); render(); });
+        watermarkInput.addEventListener('input', (e) => { config.watermark = e.target.value.trim(); render(); });
+
+        // --- Reset All Button ---
+        resetAllBtn.addEventListener('click', () => {
+            enableTextToggle.checked = false;
+            config.hasText = false;
+            textControls.classList.add('hidden');
+            headlineInput.value = '';
+            subheadlineInput.value = '';
+
+            enableBrandingToggle.checked = false;
+            config.hasBranding = false;
+            brandingControls.classList.add('hidden');
+            badgeInput.value = '';
+            watermarkInput.value = '';
+
+            config.filter = 'none';
+            filterBtns[0].click();
+
+            config.fitMode = 'cover';
+            modeCoverBtn.click();
+
+            config.panX = 0;
+            config.panY = 0;
+            config.zoom = 1.0;
+            zoomSlider.value = 1.0;
+
+            render();
+        });
+
+        // --- Interactive Mouse & Touch Drag on Canvas ---
+        let isDragging = false;
+        let startX, startY;
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaX = (e.clientX - startX) * (config.width / canvas.clientWidth);
+            const deltaY = (e.clientY - startY) * (config.height / canvas.clientHeight);
+            startX = e.clientX;
+            startY = e.clientY;
+            config.panX += deltaX;
+            config.panY += deltaY;
+            render();
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // Touch support for mobile dragging
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }
+        });
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging || e.touches.length !== 1) return;
+            const deltaX = (e.touches[0].clientX - startX) * (config.width / canvas.clientWidth);
+            const deltaY = (e.touches[0].clientY - startY) * (config.height / canvas.clientHeight);
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            config.panX += deltaX;
+            config.panY += deltaY;
+            render();
+        });
+        window.addEventListener('touchend', () => { isDragging = false; });
+
+
+        // ==========================================
+        // MAIN CANVAS RENDER PIPELINE
+        // ==========================================
+        function render() {
+            if (!uploadedImg) return;
+
+            const W = config.width;
+            const H = config.height;
+
+            // Clear Background
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, W, H);
+
+            // 1. Draw Image Layer (Fit or Cover)
+            drawImageLayer(W, H);
+
+            // 2. Optional Scrim (Gradient for text readability)
+            if (config.hasText && config.hasScrim) {
+                drawGradientScrim(W, H);
+            }
+
+            // 3. Optional Branding / Badge Layer
+            if (config.hasBranding) {
+                drawBrandingLayer(W, H);
+            }
+
+            // 4. Optional Text Overlay Layer
+            if (config.hasText && (config.headline || config.subheadline)) {
+                drawTextLayer(W, H);
+            }
+        }
+
+        function getFilterString(filter) {
+            switch(filter) {
+                case 'warm': return 'sepia(0.25) saturate(1.2) brightness(1.05)';
+                case 'vibrant': return 'contrast(1.15) saturate(1.35)';
+                case 'moody': return 'contrast(1.2) brightness(0.9) saturate(0.85)';
+                case 'bw': return 'grayscale(1) contrast(1.25)';
+                default: return 'none';
+            }
+        }
+
+        function drawImageLayer(W, H) {
+            const imgAspect = uploadedImg.width / uploadedImg.height;
+            const canvasAspect = W / H;
+
+            // If Blur Backdrop Mode is active
+            if (config.fitMode === 'blur') {
+                ctx.save();
+                ctx.filter = 'blur(45px) brightness(0.85)';
+                ctx.drawImage(uploadedImg, -50, -50, W + 100, H + 100);
+                ctx.restore();
+
+                // Draw sharp contained image on top
+                ctx.save();
+                ctx.filter = getFilterString(config.filter);
+                let drawW, drawH;
+                if (imgAspect > canvasAspect) {
+                    drawW = W * config.zoom;
+                    drawH = (W / imgAspect) * config.zoom;
+                } else {
+                    drawH = H * config.zoom;
+                    drawW = (H * imgAspect) * config.zoom;
+                }
+                const posX = ((W - drawW) / 2) + config.panX;
+                const posY = ((H - drawH) / 2) + config.panY;
+                ctx.drawImage(uploadedImg, posX, posY, drawW, drawH);
+                ctx.restore();
+                return;
+            }
+
+            // Standard "Crop to Fill / Cover" Mode
+            let baseW, baseH;
+            if (imgAspect > canvasAspect) {
+                baseH = H;
+                baseW = uploadedImg.width * (H / uploadedImg.height);
+            } else {
+                baseW = W;
+                baseH = uploadedImg.height * (W / uploadedImg.width);
+            }
+
+            const drawW = baseW * config.zoom;
+            const drawH = baseH * config.zoom;
+            const posX = ((W - drawW) / 2) + config.panX;
+            const posY = ((H - drawH) / 2) + config.panY;
+
+            ctx.save();
+            ctx.filter = getFilterString(config.filter);
+            ctx.drawImage(uploadedImg, posX, posY, drawW, drawH);
+            ctx.restore();
+        }
+
+        function drawGradientScrim(W, H) {
+            ctx.save();
+            const grad = ctx.createLinearGradient(0, 0, 0, H);
+            if (config.textPosition === 'bottom') {
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(0.45, 'rgba(0,0,0,0.1)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.85)');
+            } else if (config.textPosition === 'top') {
+                grad.addColorStop(0, 'rgba(0,0,0,0.85)');
+                grad.addColorStop(0.55, 'rgba(0,0,0,0.1)');
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+            } else {
+                // Center
+                grad.addColorStop(0, 'rgba(0,0,0,0.2)');
+                grad.addColorStop(0.5, 'rgba(0,0,0,0.75)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.2)');
+            }
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+        }
+
+        function drawBrandingLayer(W, H) {
+            ctx.save();
+            // Draw Badge (Top Left Pill)
+            if (config.badge) {
+                const badgeText = config.badge.toUpperCase();
+                ctx.font = "bold 26px 'Plus Jakarta Sans', sans-serif";
+                const metrics = ctx.measureText(badgeText);
+                const padX = 24;
+                const padY = 14;
+                const pillW = metrics.width + (padX * 2);
+                const pillH = 50;
+                const pillX = 60;
+                const pillY = 60;
+
+                // Red Pill Background
+                ctx.fillStyle = '#E60023';
+                ctx.shadowColor = 'rgba(0,0,0,0.35)';
+                ctx.shadowBlur = 12;
+                ctx.shadowOffsetY = 4;
+                ctx.beginPath();
+                ctx.roundRect(pillX, pillY, pillW, pillH, 25);
+                ctx.fill();
+
+                // White Badge Text
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(badgeText, pillX + pillW / 2, pillY + pillH / 2 + 1);
+            }
+
+            // Draw Website / Watermark (Bottom Center)
+            if (config.watermark) {
+                ctx.font = "600 24px 'Inter', sans-serif";
+                ctx.textAlign = 'center';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+                ctx.shadowColor = 'rgba(0,0,0,0.7)';
+                ctx.shadowBlur = 8;
+                ctx.shadowOffsetY = 2;
+                ctx.fillText(config.watermark.toLowerCase(), W / 2, H - 45);
+            }
+            ctx.restore();
+        }
+
+        function drawTextLayer(W, H) {
+            ctx.save();
+            const padding = 70;
+            const maxWidth = W - (padding * 2);
+
+            // Compute Y position based on selection
+            let startY;
+            if (config.textPosition === 'bottom') {
+                startY = H - (config.hasBranding && config.watermark ? 280 : 220);
+            } else if (config.textPosition === 'top') {
+                startY = (config.hasBranding && config.badge ? 180 : 120);
+            } else {
+                startY = H / 2 - 40;
+            }
+
+            // Draw Headline
+            if (config.headline) {
+                ctx.font = `800 64px ${config.font}`;
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowBlur = 18;
+                ctx.shadowOffsetY = 4;
+
+                const lines = wrapText(ctx, config.headline, maxWidth);
+                lines.forEach((line, i) => {
+                    ctx.fillText(line, W / 2, startY + (i * 74));
+                });
+
+                startY += (lines.length * 74) + 16;
+            }
+
+            // Draw Sub-headline
+            if (config.subheadline) {
+                ctx.font = `600 32px 'Inter', sans-serif`;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowBlur = 12;
+                ctx.shadowOffsetY = 2;
+
+                const subLines = wrapText(ctx, config.subheadline, maxWidth);
+                subLines.forEach((line, i) => {
+                    ctx.fillText(line, W / 2, startY + (i * 42));
+                });
+            }
+
+            ctx.restore();
+        }
+
+        // Helper: Word Wrap for Canvas
+        function wrapText(context, text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = context.measureText(currentLine + " " + word).width;
+                if (width < maxWidth) {
+                    currentLine += " " + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- 1-Click Fast Download ---
+        downloadBtn.addEventListener('click', function() {
+            if (!uploadedImg) return;
+            const dataURL = canvas.toDataURL('image/jpeg', 0.95);
+            const a = document.createElement('a');
+            a.href = dataURL;
+            a.download = `pinterest-pin-${Date.now()}.jpg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    </script>
+</body>
+</html>
