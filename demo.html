@@ -188,7 +188,7 @@
                         <div class="border border-red-200/90 rounded-2xl p-4 bg-gradient-to-br from-white to-red-50/20 shadow-sm transition hover:border-red-300">
                             <div class="flex items-center justify-between">
                                 <label for="enableSaleToggle" class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
-                                    <span>🏷️</span> Price Tag & Sale Badge
+                                    <span>🏷️</span> Price Tag & Shop CTA
                                     <span class="bg-red-100 text-pinterest text-[9px] font-bold px-1.5 py-0.5 rounded-md">Sales Booster</span>
                                 </label>
                                 <input type="checkbox" id="enableSaleToggle" class="w-4 h-4 text-pinterest rounded border-gray-300 focus:ring-red-400 cursor-pointer">
@@ -360,6 +360,9 @@
         const discountTagInput = document.getElementById('discountTagInput');
         const priceBadgeStyleSelect = document.getElementById('priceBadgeStyleSelect');
         const priceBadgePosSelect = document.getElementById('priceBadgePosSelect');
+        const ctaTextInput = document.getElementById('ctaTextInput');
+        const ctaStyleSelect = document.getElementById('ctaStyleSelect');
+        const quickCtaBtns = document.querySelectorAll('.quick-cta');
 
         // Text & Branding Controls
         const enableTextToggle = document.getElementById('enableTextToggle');
@@ -407,6 +410,8 @@
             discountTag: '',
             priceStyle: 'modern-red',
             pricePosition: 'top-right',
+            ctaText: 'SHOP NOW ➔',
+            ctaStyle: 'pinterest',
 
             badge: '',
             watermark: ''
@@ -545,6 +550,18 @@
         priceBadgeStyleSelect.addEventListener('change', (e) => { config.priceStyle = e.target.value; render(); });
         priceBadgePosSelect.addEventListener('change', (e) => { config.pricePosition = e.target.value; render(); });
 
+        
+        ctaTextInput.addEventListener('input', (e) => { config.ctaText = e.target.value.trim(); render(); });
+        ctaStyleSelect.addEventListener('change', (e) => { config.ctaStyle = e.target.value; render(); });
+        quickCtaBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const text = btn.textContent.trim();
+                ctaTextInput.value = text;
+                config.ctaText = text;
+                render();
+            });
+        });
+
         // --- Optional Text Layer Toggle ---
         enableTextToggle.addEventListener('change', (e) => {
             config.hasText = e.target.checked;
@@ -580,6 +597,9 @@
             config.salePrice = '';
             config.oldPrice = '';
             config.discountTag = '';
+            ctaTextInput.value = 'SHOP NOW ➔';
+            config.ctaText = 'SHOP NOW ➔';
+            config.ctaStyle = 'pinterest';
             enableTextToggle.checked = false;
             config.hasText = false;
             textControls.classList.add('hidden');
@@ -707,6 +727,68 @@
             context.lineTo(x, y + radius);
             context.quadraticCurveTo(x, y, x + radius, y);
             context.closePath();
+        }
+
+        
+        function drawCtaButton(W, H) {
+            if (!config.hasSale || !config.ctaText) return;
+
+            ctx.save();
+            const ctaText = config.ctaText.trim();
+            ctx.font = "800 30px 'Plus Jakarta Sans', sans-serif";
+            const textMetrics = ctx.measureText(ctaText);
+            const textW = textMetrics.width;
+
+            const btnH = 76;
+            const btnW = Math.max(340, Math.min(640, textW + 90));
+            const btnX = (W - btnW) / 2;
+            const btnY = (config.hasBranding && config.watermark) ? (H - 146) : (H - 96);
+
+            ctx.shadowBlur = 24;
+            ctx.shadowOffsetY = 8;
+
+            let grad = ctx.createLinearGradient(btnX, btnY, btnX + btnW, btnY + btnH);
+            let textColor = '#ffffff';
+
+            if (config.ctaStyle === 'gold') {
+                ctx.shadowColor = 'rgba(245, 158, 11, 0.45)';
+                grad.addColorStop(0, '#F59E0B');
+                grad.addColorStop(1, '#D97706');
+                textColor = '#18181B';
+            } else if (config.ctaStyle === 'dark') {
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                grad.addColorStop(0, '#27272A');
+                grad.addColorStop(1, '#09090B');
+                textColor = '#ffffff';
+            } else if (config.ctaStyle === 'emerald') {
+                ctx.shadowColor = 'rgba(16, 185, 129, 0.45)';
+                grad.addColorStop(0, '#10B981');
+                grad.addColorStop(1, '#047857');
+                textColor = '#ffffff';
+            } else {
+                ctx.shadowColor = 'rgba(230, 0, 35, 0.45)';
+                grad.addColorStop(0, '#E60023');
+                grad.addColorStop(1, '#AD081B');
+                textColor = '#ffffff';
+            }
+
+            ctx.fillStyle = grad;
+            drawRoundedRect(ctx, btnX, btnY, btnW, btnH, 38);
+            ctx.fill();
+
+            ctx.shadowColor = 'transparent';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+            ctx.lineWidth = 2;
+            drawRoundedRect(ctx, btnX + 2, btnY + 2, btnW - 4, btnH - 4, 36);
+            ctx.stroke();
+
+            ctx.font = "800 30px 'Plus Jakarta Sans', sans-serif";
+            ctx.fillStyle = textColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(ctaText, btnX + btnW / 2, btnY + btnH / 2 + 1);
+
+            ctx.restore();
         }
 
         function drawPriceBadge(W, H) {
