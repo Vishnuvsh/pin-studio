@@ -141,7 +141,7 @@
                     </div>
 
                     <!-- Accordion / Control Groups -->
-                    <div class="space-y-4 max-h-[520px] overflow-y-auto pr-1">
+                    <div class="space-y-4 max-h-[580px] overflow-y-auto pr-1.5">
 
                         <!-- TOOL 1: Ratio & Framing -->
                         <div class="border border-gray-200/80 rounded-2xl p-4 bg-white hover:border-gray-300 transition">
@@ -183,8 +183,7 @@
                             </div>
                         </div>
 
-                        
-                        <!-- TOOL 2: Product Price Tag & Sale Badge -->
+                        <!-- TOOL 2: Product Sales & Pricing (Price Tag & CTA Button) -->
                         <div class="border border-red-200/90 rounded-2xl p-4 bg-gradient-to-br from-white to-red-50/20 shadow-sm transition hover:border-red-300">
                             <div class="flex items-center justify-between">
                                 <label for="enableSaleToggle" class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
@@ -230,10 +229,98 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <!-- CTA Button Settings -->
+                                <div class="pt-3 border-t border-gray-100 space-y-2.5">
+                                    <label class="text-[11px] font-bold text-gray-700 uppercase tracking-wider block">🛍️ Shop CTA Button</label>
+                                    <div class="grid grid-cols-2 gap-2.5">
+                                        <div>
+                                            <label class="text-[11px] font-semibold text-gray-600 block mb-1">CTA Text</label>
+                                            <input type="text" id="ctaTextInput" placeholder="e.g. SHOP NOW ➔" value="SHOP NOW ➔" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 font-bold bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="text-[11px] font-semibold text-gray-600 block mb-1">Button Color</label>
+                                            <select id="ctaStyleSelect" class="w-full text-xs px-2.5 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                                <option value="pinterest">Pinterest Red</option>
+                                                <option value="gold">Vibrant Amber / Gold</option>
+                                                <option value="dark">Luxe Matte Black</option>
+                                                <option value="emerald">Emerald Green</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5 pt-1">
+                                        <span class="text-[10px] text-gray-400">Quick suggestions:</span>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">SHOP NOW ➔</button>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">BUY NOW 🛍️</button>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">GRAB 50% OFF ⚡</button>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">LINK IN BIO 🔗</button>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">TAP TO ORDER</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-<!-- TOOL 2: Typography & Viral Text Hook (OPT-IN TOGGLE) -->
+                        <!-- TOOL 3: Smart Description Converter (AI Copy Assistant) -->
+                        <div class="border border-purple-200/90 rounded-2xl p-4 bg-gradient-to-br from-purple-50/40 via-white to-pink-50/30 shadow-sm transition hover:border-purple-300">
+                            <div class="flex items-center justify-between">
+                                <label for="enableAiCopyToggle" class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                    <span>✨</span> Smart Description Converter
+                                    <span class="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-md tracking-wider">SMART AI</span>
+                                </label>
+                                <input type="checkbox" id="enableAiCopyToggle" class="w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-400 cursor-pointer">
+                            </div>
+
+                            <!-- Collapsible Content -->
+                            <div id="aiCopyControls" class="hidden mt-4 pt-3 border-t border-purple-100 space-y-3">
+                                <p class="text-xs text-gray-500 leading-relaxed">
+                                    Paste raw product description or notes below. It transforms them into viral Pinterest hooks, headlines, and SEO captions automatically!
+                                </p>
+
+                                <div>
+                                    <textarea id="rawProductDesc" rows="3" placeholder="e.g. Women printed cotton kurti, breathable fabric, floral pattern, size S to XXL, summer collection, price ₹499, free delivery..." class="w-full text-xs p-3 border border-gray-200 rounded-xl focus:outline-none focus:border-purple-400 bg-white leading-relaxed resize-none"></textarea>
+                                </div>
+
+                                <div class="flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-[11px] font-semibold text-gray-600">Tone:</span>
+                                        <select id="copyToneSelect" class="text-xs px-2.5 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400 bg-white">
+                                            <option value="viral">🔥 Viral Hook & Trend</option>
+                                            <option value="luxury">💎 Luxury & Aesthetic</option>
+                                            <option value="sale">⚡ Urgency & Huge Deal</option>
+                                            <option value="benefits">🌿 Clean & Benefit-Focused</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" id="generateCopyBtn" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-1.5">
+                                        <span>🪄 Convert Copy</span>
+                                    </button>
+                                </div>
+
+                                <!-- Generated Suggestions List -->
+                                <div id="copyResultsContainer" class="hidden space-y-2.5 pt-2">
+                                    <div class="text-[11px] font-bold text-gray-700 uppercase tracking-wider flex items-center justify-between">
+                                        <span>Generated Pin Hooks</span>
+                                        <span class="text-[10px] text-purple-600 font-normal">Click "Apply" to instantly update pin</span>
+                                    </div>
+                                    <div id="copyOptionsList" class="space-y-2">
+                                        <!-- Dynamically generated hook cards -->
+                                    </div>
+
+                                    <!-- SEO Caption & Hashtags Block -->
+                                    <div class="p-3 bg-white/90 border border-purple-100 rounded-xl space-y-2">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-[11px] font-bold text-gray-800">📌 Pinterest SEO Caption & Tags</span>
+                                            <button type="button" id="copyCaptionBtn" class="text-[10px] bg-purple-50 hover:bg-purple-100 text-purple-700 font-semibold px-2 py-1 rounded-md transition flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                                <span>Copy Caption</span>
+                                            </button>
+                                        </div>
+                                        <p id="generatedCaptionText" class="text-[11px] text-gray-600 font-mono whitespace-pre-wrap leading-relaxed max-h-24 overflow-y-auto bg-gray-50 p-2 rounded-lg"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 4: Typography & Viral Text Hook (OPT-IN TOGGLE) -->
                         <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
                             <div class="flex items-center justify-between">
                                 <label for="enableTextToggle" class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
@@ -282,7 +369,7 @@
                             </div>
                         </div>
 
-                        <!-- TOOL 3: Aesthetic Filters (OPTIONAL) -->
+                        <!-- TOOL 5: Aesthetic Filters (OPTIONAL) -->
                         <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
                             <label class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 mb-3">
                                 <span>🎨</span> Aesthetic Filter
@@ -296,7 +383,7 @@
                             </div>
                         </div>
 
-                        <!-- TOOL 4: Brand Badge & Watermark (OPT-IN TOGGLE) -->
+                        <!-- TOOL 6: Brand Badge & Watermark (OPT-IN TOGGLE) -->
                         <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
                             <div class="flex items-center justify-between">
                                 <label for="enableBrandingToggle" class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
@@ -351,8 +438,7 @@
         const modeBlurBtn = document.getElementById('modeBlur');
         const ratioBtns = document.querySelectorAll('.ratio-btn');
 
-        
-        // Price Controls
+        // Product Sales & Pricing Controls
         const enableSaleToggle = document.getElementById('enableSaleToggle');
         const saleControls = document.getElementById('saleControls');
         const salePriceInput = document.getElementById('salePriceInput');
@@ -363,6 +449,17 @@
         const ctaTextInput = document.getElementById('ctaTextInput');
         const ctaStyleSelect = document.getElementById('ctaStyleSelect');
         const quickCtaBtns = document.querySelectorAll('.quick-cta');
+
+        // Smart Copy Assistant Controls
+        const enableAiCopyToggle = document.getElementById('enableAiCopyToggle');
+        const aiCopyControls = document.getElementById('aiCopyControls');
+        const rawProductDesc = document.getElementById('rawProductDesc');
+        const copyToneSelect = document.getElementById('copyToneSelect');
+        const generateCopyBtn = document.getElementById('generateCopyBtn');
+        const copyResultsContainer = document.getElementById('copyResultsContainer');
+        const copyOptionsList = document.getElementById('copyOptionsList');
+        const copyCaptionBtn = document.getElementById('copyCaptionBtn');
+        const generatedCaptionText = document.getElementById('generatedCaptionText');
 
         // Text & Branding Controls
         const enableTextToggle = document.getElementById('enableTextToggle');
@@ -403,7 +500,9 @@
             hasScrim: true,
             // Branding Layer
             hasBranding: false,
-            // Price Layer
+            badge: '',
+            watermark: '',
+            // Product Sales & CTA Layer
             hasSale: false,
             salePrice: '',
             oldPrice: '',
@@ -411,10 +510,7 @@
             priceStyle: 'modern-red',
             pricePosition: 'top-right',
             ctaText: 'SHOP NOW ➔',
-            ctaStyle: 'pinterest',
-
-            badge: '',
-            watermark: ''
+            ctaStyle: 'pinterest'
         };
 
         // Initialize Canvas Size
@@ -537,28 +633,307 @@
             });
         });
 
-        
-        // Price Tag Listeners
+        // --- Product Sales & CTA Listeners ---
         enableSaleToggle.addEventListener('change', (e) => {
             config.hasSale = e.target.checked;
             saleControls.classList.toggle('hidden', !config.hasSale);
             render();
         });
-        salePriceInput.addEventListener('input', (e) => { config.salePrice = e.target.value.trim(); render(); });
-        oldPriceInput.addEventListener('input', (e) => { config.oldPrice = e.target.value.trim(); render(); });
-        discountTagInput.addEventListener('input', (e) => { config.discountTag = e.target.value.trim(); render(); });
-        priceBadgeStyleSelect.addEventListener('change', (e) => { config.priceStyle = e.target.value; render(); });
-        priceBadgePosSelect.addEventListener('change', (e) => { config.pricePosition = e.target.value; render(); });
 
-        
-        ctaTextInput.addEventListener('input', (e) => { config.ctaText = e.target.value.trim(); render(); });
-        ctaStyleSelect.addEventListener('change', (e) => { config.ctaStyle = e.target.value; render(); });
+        salePriceInput.addEventListener('input', (e) => {
+            config.salePrice = e.target.value.trim();
+            render();
+        });
+
+        oldPriceInput.addEventListener('input', (e) => {
+            config.oldPrice = e.target.value.trim();
+            render();
+        });
+
+        discountTagInput.addEventListener('input', (e) => {
+            config.discountTag = e.target.value.trim();
+            render();
+        });
+
+        priceBadgeStyleSelect.addEventListener('change', (e) => {
+            config.priceStyle = e.target.value;
+            render();
+        });
+
+        priceBadgePosSelect.addEventListener('change', (e) => {
+            config.pricePosition = e.target.value;
+            render();
+        });
+
+        ctaTextInput.addEventListener('input', (e) => {
+            config.ctaText = e.target.value.trim();
+            render();
+        });
+
+        ctaStyleSelect.addEventListener('change', (e) => {
+            config.ctaStyle = e.target.value;
+            render();
+        });
+
         quickCtaBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const text = btn.textContent.trim();
                 ctaTextInput.value = text;
                 config.ctaText = text;
                 render();
+            });
+        });
+
+        // --- Smart Description Converter & Copy Generator ---
+        enableAiCopyToggle.addEventListener('change', (e) => {
+            aiCopyControls.classList.toggle('hidden', !e.target.checked);
+        });
+
+        generateCopyBtn.addEventListener('click', () => {
+            const raw = rawProductDesc.value.trim();
+            if (!raw) {
+                alert('Please paste a product description or details first!');
+                rawProductDesc.focus();
+                return;
+            }
+
+            const tone = copyToneSelect.value;
+            generateProductHooks(raw, tone);
+        });
+
+        function parseProductDetails(raw) {
+            // Price regex (₹, Rs, INR, $, etc.)
+            let price = '';
+            const priceRegex = /(?:₹|rs\.?|inr|\$)\s*(\d+[\d,]*(?:\.\d{2})?)/i;
+            const priceRegex2 = /(\d+[\d,]*)\s*(?:rs|rupees|inr|\/-)/i;
+            let m = raw.match(priceRegex);
+            if (m) {
+                price = (m[0].includes('$') ? '$' : '₹') + m[1].replace(/,/g, '');
+            } else {
+                m = raw.match(priceRegex2);
+                if (m) price = '₹' + m[1].replace(/,/g, '');
+            }
+
+            // Discount regex
+            let discount = '';
+            const discRegex = /(\d{1,2}%\s*(?:off|discount)?|flat\s*\d{1,2}%)/i;
+            const dm = raw.match(discRegex);
+            if (dm) discount = dm[0].toUpperCase().includes('OFF') ? dm[0].toUpperCase() : dm[0].toUpperCase() + ' OFF';
+
+            // Clean keywords
+            const lower = raw.toLowerCase();
+            const productKeywords = [
+                'kurti', 'saree', 'dress', 'gown', 'lehenga', 'shirt', 't-shirt', 'tshirt',
+                'jeans', 'hoodie', 'jacket', 'top', 'blouse', 'necklace', 'earrings', 'jewelry',
+                'ring', 'bracelet', 'bangle', 'handbag', 'bag', 'tote', 'backpack', 'wallet',
+                'shoes', 'sneakers', 'heels', 'sandals', 'watch', 'sunglasses', 'serum', 'cream',
+                'lipstick', 'perfume', 'sunscreen', 'lamp', 'rug', 'decor', 'organizer', 'bottle',
+                'earbuds', 'case', 'headphones', 'pillow'
+            ];
+
+            let detectedProduct = '';
+            for (const kw of productKeywords) {
+                if (new RegExp('\\b' + kw + 's?\\b', 'i').test(lower)) {
+                    detectedProduct = kw.charAt(0).toUpperCase() + kw.slice(1);
+                    break;
+                }
+            }
+
+            // If no specific noun matched, take first 2-3 words as item title
+            if (!detectedProduct) {
+                const words = raw.split(/[\n,.]+/)[0].trim().split(/\s+/).slice(0, 3);
+                detectedProduct = words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            }
+
+            // Extract features / materials
+            const featureKws = [
+                'cotton', 'silk', 'linen', 'denim', 'leather', 'breathable', 'handmade', 'handcrafted',
+                'organic', 'pure', 'oversized', 'floral', 'embroidered', 'printed', 'vintage',
+                'waterproof', 'wireless', 'durable', 'comfortable', 'casual', 'festive', 'luxury',
+                'lightweight', 'premium', 'soft', 'anti-tarnish', 'gold plated', 'aesthetic',
+                'free delivery', 'cash on delivery'
+            ];
+            const foundFeatures = [];
+            featureKws.forEach(f => {
+                if (lower.includes(f)) {
+                    foundFeatures.push(f.charAt(0).toUpperCase() + f.slice(1));
+                }
+            });
+
+            return {
+                raw,
+                price,
+                discount,
+                product: detectedProduct || 'Product',
+                features: foundFeatures.length ? foundFeatures.slice(0, 4) : ['Premium Quality', 'Trending Design', 'Comfortable Fit']
+            };
+        }
+
+        function generateProductHooks(raw, tone) {
+            const data = parseProductDetails(raw);
+            const prod = data.product;
+            const feat1 = data.features[0] || 'Premium Quality';
+            const feat2 = data.features[1] || 'Timeless Style';
+            const priceTag = data.price ? `Under ${data.price}` : 'Special Launch Price';
+
+            let options = [];
+
+            if (tone === 'viral') {
+                options = [
+                    {
+                        headline: `The Viral ${prod} You Need Now ✨`,
+                        subheadline: `Aesthetic, comfortable & ${priceTag} — selling fast!`
+                    },
+                    {
+                        headline: `Stop Scrolling: This ${prod} Just Dropped 🔥`,
+                        subheadline: `Upgrade your daily wardrobe with effortless chic vibes`
+                    },
+                    {
+                        headline: `Everyone Is Obsessed With This ${prod}`,
+                        subheadline: `High quality, breathtaking fit & 100% aesthetic appeal`
+                    }
+                ];
+            } else if (tone === 'luxury') {
+                options = [
+                    {
+                        headline: `Pure Elegance: Handcrafted ${prod}`,
+                        subheadline: `Designed with ${feat1.toLowerCase()} for timeless sophistication`
+                    },
+                    {
+                        headline: `The ${prod} Edit: Effortless Luxury`,
+                        subheadline: `Curated for those who appreciate understated beauty`
+                    },
+                    {
+                        headline: `Unmatched Perfection: Signature ${prod}`,
+                        subheadline: `Luxurious comfort crafted for your most memorable moments`
+                    }
+                ];
+            } else if (tone === 'sale') {
+                options = [
+                    {
+                        headline: `🔥 MASSIVE SALE: Limited Time On ${prod}!`,
+                        subheadline: `${data.discount || 'Huge Discount'} Today Only! Grab yours before sold out`
+                    },
+                    {
+                        headline: `Flash Deal Alert: ${prod} On Sale`,
+                        subheadline: `Premium quality at unbeatable price. Tap to claim deal 🛍️`
+                    },
+                    {
+                        headline: `Last Few Left: Grab Your ${prod} Today!`,
+                        subheadline: `Free delivery & instant checkout — don't miss out!`
+                    }
+                ];
+            } else { // benefits / clean
+                options = [
+                    {
+                        headline: `Meet Your New Favorite ${prod}`,
+                        subheadline: `${feat1}, ${feat2.toLowerCase()} & crafted for all-day comfort`
+                    },
+                    {
+                        headline: `The Only ${prod} You'll Ever Need`,
+                        subheadline: `Simple, timeless design that looks good with everything`
+                    },
+                    {
+                        headline: `Upgrade Your Everyday: ${prod}`,
+                        subheadline: `Breathable, durable & thoughtfully made for you`
+                    }
+                ];
+            }
+
+            // Render options
+            copyOptionsList.innerHTML = '';
+            options.forEach((opt) => {
+                const card = document.createElement('div');
+                card.className = "p-3 bg-white border border-purple-100 hover:border-purple-300 rounded-xl transition shadow-xs flex items-center justify-between gap-2";
+                card.innerHTML = `
+                    <div class="flex-1 pr-1">
+                        <p class="text-xs font-bold text-gray-900 leading-tight">"${opt.headline}"</p>
+                        <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">${opt.subheadline}</p>
+                    </div>
+                    <button type="button" class="apply-hook-btn shrink-0 bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-900 border border-purple-200 text-[11px] font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 active:scale-95">
+                        <span>⚡ Apply</span>
+                    </button>
+                `;
+
+                // Handle click on Apply
+                card.querySelector('.apply-hook-btn').addEventListener('click', (e) => {
+                    // Update headline & subheadline
+                    config.headline = opt.headline;
+                    config.subheadline = opt.subheadline;
+                    headlineInput.value = opt.headline;
+                    subheadlineInput.value = opt.subheadline;
+
+                    // Turn on text layer
+                    config.hasText = true;
+                    enableTextToggle.checked = true;
+                    textControls.classList.remove('hidden');
+
+                    // If price detected in description, populate price controls automatically!
+                    if (data.price) {
+                        config.salePrice = data.price;
+                        salePriceInput.value = data.price;
+                        config.hasSale = true;
+                        enableSaleToggle.checked = true;
+                        saleControls.classList.remove('hidden');
+                    }
+                    if (data.discount) {
+                        config.discountTag = data.discount;
+                        discountTagInput.value = data.discount;
+                    }
+
+                    render();
+
+                    // Button visual feedback
+                    const btn = e.currentTarget;
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span>✓ Applied!</span>';
+                    btn.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.classList.remove('bg-green-100', 'text-green-800', 'border-green-300');
+                    }, 1800);
+                });
+
+                copyOptionsList.appendChild(card);
+            });
+
+            // Generate SEO Caption & Hashtags
+            const tagClean = prod.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const captionLines = [
+                `Looking for the perfect ${prod.toLowerCase()}? ✨`,
+                ``,
+                `Upgrade your style with our top-rated ${prod.toLowerCase()}. Designed with premium materials for maximum comfort and an irresistible aesthetic appeal!`,
+                ``,
+                `✨ Why you'll love it:`,
+                `✔ ${data.features[0] || 'Premium Quality'}`,
+                `✔ ${data.features[1] || 'Timeless aesthetic & versatile fit'}`,
+                data.price ? `✔ Special Price: ${data.price}` : `✔ Exclusive collection`,
+                `✔ Fast delivery & easy checkout 🚚`,
+                ``,
+                `👉 Tap the pin or visit our store link to shop now! 🛍️`,
+                ``,
+                `#pinterestfinds #shoppin #${tagClean} #${tagClean}style #aestheticfashion #ootd #musthave #trendingnow #pinterestshopping`
+            ];
+
+            generatedCaptionText.textContent = captionLines.join('\n');
+            copyResultsContainer.classList.remove('hidden');
+        }
+
+        // Copy Caption to Clipboard
+        copyCaptionBtn.addEventListener('click', () => {
+            const text = generatedCaptionText.textContent;
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                copyCaptionBtn.innerHTML = `
+                    <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="text-green-700">Copied! ✓</span>
+                `;
+                setTimeout(() => {
+                    copyCaptionBtn.innerHTML = `
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <span>Copy Caption</span>
+                    `;
+                }, 2000);
             });
         });
 
@@ -587,30 +962,45 @@
 
         // --- Reset All Button ---
         resetAllBtn.addEventListener('click', () => {
-            
-            enableSaleToggle.checked = false;
-            config.hasSale = false;
-            saleControls.classList.add('hidden');
-            salePriceInput.value = '';
-            oldPriceInput.value = '';
-            discountTagInput.value = '';
-            config.salePrice = '';
-            config.oldPrice = '';
-            config.discountTag = '';
-            ctaTextInput.value = 'SHOP NOW ➔';
-            config.ctaText = 'SHOP NOW ➔';
-            config.ctaStyle = 'pinterest';
+            // Reset Text
             enableTextToggle.checked = false;
             config.hasText = false;
             textControls.classList.add('hidden');
             headlineInput.value = '';
             subheadlineInput.value = '';
 
+            // Reset Branding
             enableBrandingToggle.checked = false;
             config.hasBranding = false;
             brandingControls.classList.add('hidden');
             badgeInput.value = '';
             watermarkInput.value = '';
+
+            // Reset Sale & CTA
+            enableSaleToggle.checked = false;
+            config.hasSale = false;
+            saleControls.classList.add('hidden');
+            salePriceInput.value = '';
+            oldPriceInput.value = '';
+            discountTagInput.value = '';
+            ctaTextInput.value = 'SHOP NOW ➔';
+            config.salePrice = '';
+            config.oldPrice = '';
+            config.discountTag = '';
+            config.ctaText = 'SHOP NOW ➔';
+            config.priceStyle = 'modern-red';
+            config.pricePosition = 'top-right';
+            config.ctaStyle = 'pinterest';
+            priceBadgeStyleSelect.value = 'modern-red';
+            priceBadgePosSelect.value = 'top-right';
+            ctaStyleSelect.value = 'pinterest';
+
+            // Reset AI Copy
+            enableAiCopyToggle.checked = false;
+            aiCopyControls.classList.add('hidden');
+            rawProductDesc.value = '';
+            copyOptionsList.innerHTML = '';
+            copyResultsContainer.classList.add('hidden');
 
             config.filter = 'none';
             filterBtns[0].click();
@@ -687,28 +1077,32 @@
             // 1. Draw Image Layer (Fit or Cover)
             drawImageLayer(W, H);
 
-            // 2. Optional Scrim (Gradient for text readability)
-            if (config.hasText && config.hasScrim) {
+            // 2. Scrim (Gradient for text and/or bottom CTA readability)
+            if ((config.hasText && config.hasScrim) || (config.hasSale && config.ctaText)) {
                 drawGradientScrim(W, H);
             }
 
-            // 2.5 Price Badge Layer
+            // 3. Price Badge Layer (if enabled & sale price provided)
             if (config.hasSale && config.salePrice) {
                 drawPriceBadge(W, H);
             }
 
-            // 3. Optional Branding / Badge Layer
+            // 4. Branding / Badge Layer
             if (config.hasBranding) {
                 drawBrandingLayer(W, H);
             }
 
-            // 4. Optional Text Overlay Layer
+            // 5. Text Overlay Layer
             if (config.hasText && (config.headline || config.subheadline)) {
                 drawTextLayer(W, H);
             }
+
+            // 6. Shop CTA Button Layer
+            if (config.hasSale && config.ctaText) {
+                drawCtaButton(W, H);
+            }
         }
 
-        
         // Helper: Safe Rounded Rect
         function drawRoundedRect(context, x, y, width, height, radius) {
             if (context.roundRect) {
@@ -727,189 +1121,6 @@
             context.lineTo(x, y + radius);
             context.quadraticCurveTo(x, y, x + radius, y);
             context.closePath();
-        }
-
-        
-        function drawCtaButton(W, H) {
-            if (!config.hasSale || !config.ctaText) return;
-
-            ctx.save();
-            const ctaText = config.ctaText.trim();
-            ctx.font = "800 30px 'Plus Jakarta Sans', sans-serif";
-            const textMetrics = ctx.measureText(ctaText);
-            const textW = textMetrics.width;
-
-            const btnH = 76;
-            const btnW = Math.max(340, Math.min(640, textW + 90));
-            const btnX = (W - btnW) / 2;
-            const btnY = (config.hasBranding && config.watermark) ? (H - 146) : (H - 96);
-
-            ctx.shadowBlur = 24;
-            ctx.shadowOffsetY = 8;
-
-            let grad = ctx.createLinearGradient(btnX, btnY, btnX + btnW, btnY + btnH);
-            let textColor = '#ffffff';
-
-            if (config.ctaStyle === 'gold') {
-                ctx.shadowColor = 'rgba(245, 158, 11, 0.45)';
-                grad.addColorStop(0, '#F59E0B');
-                grad.addColorStop(1, '#D97706');
-                textColor = '#18181B';
-            } else if (config.ctaStyle === 'dark') {
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-                grad.addColorStop(0, '#27272A');
-                grad.addColorStop(1, '#09090B');
-                textColor = '#ffffff';
-            } else if (config.ctaStyle === 'emerald') {
-                ctx.shadowColor = 'rgba(16, 185, 129, 0.45)';
-                grad.addColorStop(0, '#10B981');
-                grad.addColorStop(1, '#047857');
-                textColor = '#ffffff';
-            } else {
-                ctx.shadowColor = 'rgba(230, 0, 35, 0.45)';
-                grad.addColorStop(0, '#E60023');
-                grad.addColorStop(1, '#AD081B');
-                textColor = '#ffffff';
-            }
-
-            ctx.fillStyle = grad;
-            drawRoundedRect(ctx, btnX, btnY, btnW, btnH, 38);
-            ctx.fill();
-
-            ctx.shadowColor = 'transparent';
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-            ctx.lineWidth = 2;
-            drawRoundedRect(ctx, btnX + 2, btnY + 2, btnW - 4, btnH - 4, 36);
-            ctx.stroke();
-
-            ctx.font = "800 30px 'Plus Jakarta Sans', sans-serif";
-            ctx.fillStyle = textColor;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(ctaText, btnX + btnW / 2, btnY + btnH / 2 + 1);
-
-            ctx.restore();
-        }
-
-        function drawPriceBadge(W, H) {
-            if (!config.hasSale || !config.salePrice) return;
-
-            ctx.save();
-            const saleText = config.salePrice.trim();
-            const oldText = config.oldPrice ? config.oldPrice.trim() : '';
-            const discountText = config.discountTag ? config.discountTag.trim().toUpperCase() : '';
-
-            ctx.font = "800 42px 'Plus Jakarta Sans', sans-serif";
-            const saleWidth = ctx.measureText(saleText).width;
-
-            ctx.font = "600 24px 'Inter', sans-serif";
-            const oldWidth = oldText ? ctx.measureText(oldText).width : 0;
-
-            ctx.font = "bold 16px 'Plus Jakarta Sans', sans-serif";
-            const discountWidth = discountText ? ctx.measureText(discountText).width : 0;
-
-            const padX = 26;
-            const padY = 18;
-            const contentW = Math.max(saleWidth + (oldWidth ? oldWidth + 14 : 0), discountWidth + 16);
-            const badgeW = Math.max(210, contentW + (padX * 2));
-            const badgeH = discountText ? 104 : 80;
-
-            let posX = W - badgeW - 60;
-            let posY = 60;
-
-            if (config.pricePosition === 'top-left') {
-                posX = 60;
-                posY = (config.hasBranding && config.badge) ? 130 : 60;
-            } else if (config.pricePosition === 'bottom-left') {
-                posX = 60;
-                posY = H - 140 - badgeH;
-            }
-
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
-            ctx.shadowBlur = 18;
-            ctx.shadowOffsetY = 6;
-
-            let bgGrad = ctx.createLinearGradient(posX, posY, posX + badgeW, posY + badgeH);
-            let textColor = '#ffffff';
-            let oldTextColor = 'rgba(255, 255, 255, 0.7)';
-            let strikeColor = '#ffffff';
-
-            if (config.priceStyle === 'gold-luxury') {
-                bgGrad.addColorStop(0, '#F59E0B');
-                bgGrad.addColorStop(1, '#D97706');
-                textColor = '#18181B';
-                oldTextColor = 'rgba(24, 24, 27, 0.65)';
-                strikeColor = '#DC2626';
-            } else if (config.priceStyle === 'sleek-dark') {
-                bgGrad.addColorStop(0, 'rgba(24, 24, 27, 0.95)');
-                bgGrad.addColorStop(1, 'rgba(9, 9, 11, 0.95)');
-                textColor = '#FBBF24';
-                oldTextColor = 'rgba(255, 255, 255, 0.6)';
-                strikeColor = '#EF4444';
-            } else if (config.priceStyle === 'clean-white') {
-                bgGrad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
-                bgGrad.addColorStop(1, 'rgba(248, 250, 252, 0.98)');
-                textColor = '#E60023';
-                oldTextColor = '#64748B';
-                strikeColor = '#DC2626';
-            } else {
-                bgGrad.addColorStop(0, '#E60023');
-                bgGrad.addColorStop(1, '#B91C1C');
-                textColor = '#ffffff';
-                oldTextColor = 'rgba(255, 255, 255, 0.75)';
-                strikeColor = '#FEE2E2';
-            }
-
-            ctx.fillStyle = bgGrad;
-            drawRoundedRect(ctx, posX, posY, badgeW, badgeH, 22);
-            ctx.fill();
-
-            ctx.shadowColor = 'transparent';
-            ctx.lineWidth = 1.5;
-            ctx.strokeStyle = config.priceStyle === 'clean-white' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.25)';
-            ctx.stroke();
-
-            let currentY = posY + (discountText ? 70 : badgeH / 2);
-
-            if (discountText) {
-                const discPadX = 12;
-                const discPillW = discountWidth + (discPadX * 2);
-                const discPillH = 24;
-                const discX = posX + padX;
-                const discY = posY + 14;
-
-                ctx.fillStyle = config.priceStyle === 'gold-luxury' ? '#18181B' : (config.priceStyle === 'clean-white' ? '#E60023' : '#FBBF24');
-                drawRoundedRect(ctx, discX, discY, discPillW, discPillH, 12);
-                ctx.fill();
-
-                ctx.fillStyle = config.priceStyle === 'gold-luxury' ? '#FBBF24' : '#ffffff';
-                ctx.font = "bold 15px 'Plus Jakarta Sans', sans-serif";
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(discountText, discX + discPillW / 2, discY + discPillH / 2 + 1);
-            }
-
-            ctx.font = "800 42px 'Plus Jakarta Sans', sans-serif";
-            ctx.fillStyle = textColor;
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(saleText, posX + padX, currentY);
-
-            if (oldText) {
-                const saleRight = posX + padX + saleWidth + 12;
-                ctx.font = "600 24px 'Inter', sans-serif";
-                ctx.fillStyle = oldTextColor;
-                ctx.fillText(oldText, saleRight, currentY + 2);
-
-                ctx.strokeStyle = strikeColor;
-                ctx.lineWidth = 2.5;
-                ctx.beginPath();
-                ctx.moveTo(saleRight - 2, currentY + 3);
-                ctx.lineTo(saleRight + oldWidth + 4, currentY + 1);
-                ctx.stroke();
-            }
-
-            ctx.restore();
         }
 
         function getFilterString(filter) {
@@ -975,10 +1186,11 @@
         function drawGradientScrim(W, H) {
             ctx.save();
             const grad = ctx.createLinearGradient(0, 0, 0, H);
-            if (config.textPosition === 'bottom') {
+            if (config.textPosition === 'bottom' || (config.hasSale && config.ctaText)) {
                 grad.addColorStop(0, 'rgba(0,0,0,0)');
-                grad.addColorStop(0.45, 'rgba(0,0,0,0.1)');
-                grad.addColorStop(1, 'rgba(0,0,0,0.85)');
+                grad.addColorStop(0.45, 'rgba(0,0,0,0.05)');
+                grad.addColorStop(0.75, 'rgba(0,0,0,0.55)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.88)');
             } else if (config.textPosition === 'top') {
                 grad.addColorStop(0, 'rgba(0,0,0,0.85)');
                 grad.addColorStop(0.55, 'rgba(0,0,0,0.1)');
@@ -991,6 +1203,137 @@
             }
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+        }
+
+        function drawPriceBadge(W, H) {
+            if (!config.hasSale || !config.salePrice) return;
+
+            ctx.save();
+            const saleText = config.salePrice.trim();
+            const oldText = config.oldPrice ? config.oldPrice.trim() : '';
+            const discountText = config.discountTag ? config.discountTag.trim().toUpperCase() : '';
+
+            // Calculate dimensions
+            ctx.font = "800 42px 'Plus Jakarta Sans', sans-serif";
+            const saleWidth = ctx.measureText(saleText).width;
+
+            ctx.font = "600 24px 'Inter', sans-serif";
+            const oldWidth = oldText ? ctx.measureText(oldText).width : 0;
+
+            ctx.font = "bold 16px 'Plus Jakarta Sans', sans-serif";
+            const discountWidth = discountText ? ctx.measureText(discountText).width : 0;
+
+            const padX = 26;
+            const padY = 18;
+            const contentW = Math.max(saleWidth + (oldWidth ? oldWidth + 14 : 0), discountWidth + 16);
+            const badgeW = Math.max(210, contentW + (padX * 2));
+            const badgeH = discountText ? 104 : 80;
+
+            let posX = W - badgeW - 60;
+            let posY = 60;
+
+            if (config.pricePosition === 'top-left') {
+                posX = 60;
+                posY = (config.hasBranding && config.badge) ? 130 : 60;
+            } else if (config.pricePosition === 'bottom-left') {
+                posX = 60;
+                posY = H - (config.hasSale && config.ctaText ? 200 : 130) - badgeH;
+            }
+
+            // Shadow
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+            ctx.shadowBlur = 18;
+            ctx.shadowOffsetY = 6;
+
+            // Background styling
+            let bgGrad = ctx.createLinearGradient(posX, posY, posX + badgeW, posY + badgeH);
+            let textColor = '#ffffff';
+            let oldTextColor = 'rgba(255, 255, 255, 0.7)';
+            let strikeColor = '#ffffff';
+
+            if (config.priceStyle === 'gold-luxury') {
+                bgGrad.addColorStop(0, '#F59E0B');
+                bgGrad.addColorStop(1, '#D97706');
+                textColor = '#18181B';
+                oldTextColor = 'rgba(24, 24, 27, 0.65)';
+                strikeColor = '#DC2626';
+            } else if (config.priceStyle === 'sleek-dark') {
+                bgGrad.addColorStop(0, 'rgba(24, 24, 27, 0.95)');
+                bgGrad.addColorStop(1, 'rgba(9, 9, 11, 0.95)');
+                textColor = '#FBBF24';
+                oldTextColor = 'rgba(255, 255, 255, 0.6)';
+                strikeColor = '#EF4444';
+            } else if (config.priceStyle === 'clean-white') {
+                bgGrad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+                bgGrad.addColorStop(1, 'rgba(248, 250, 252, 0.98)');
+                textColor = '#E60023';
+                oldTextColor = '#64748B';
+                strikeColor = '#DC2626';
+            } else { // modern-red
+                bgGrad.addColorStop(0, '#E60023');
+                bgGrad.addColorStop(1, '#B91C1C');
+                textColor = '#ffffff';
+                oldTextColor = 'rgba(255, 255, 255, 0.75)';
+                strikeColor = '#FEE2E2';
+            }
+
+            // Draw main badge card
+            ctx.fillStyle = bgGrad;
+            drawRoundedRect(ctx, posX, posY, badgeW, badgeH, 22);
+            ctx.fill();
+
+            // Subtle border
+            ctx.shadowColor = 'transparent';
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = config.priceStyle === 'clean-white' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.25)';
+            ctx.stroke();
+
+            // Content positions
+            let currentY = posY + (discountText ? 70 : badgeH / 2);
+
+            // If discount tag exists: draw small pill at top inside card
+            if (discountText) {
+                const discPadX = 12;
+                const discPillW = discountWidth + (discPadX * 2);
+                const discPillH = 24;
+                const discX = posX + padX;
+                const discY = posY + 14;
+
+                ctx.fillStyle = config.priceStyle === 'gold-luxury' ? '#18181B' : (config.priceStyle === 'clean-white' ? '#E60023' : '#FBBF24');
+                drawRoundedRect(ctx, discX, discY, discPillW, discPillH, 12);
+                ctx.fill();
+
+                ctx.fillStyle = config.priceStyle === 'gold-luxury' ? '#FBBF24' : '#ffffff';
+                ctx.font = "bold 15px 'Plus Jakarta Sans', sans-serif";
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(discountText, discX + discPillW / 2, discY + discPillH / 2 + 1);
+            }
+
+            // Draw Sale Price
+            ctx.font = "800 42px 'Plus Jakarta Sans', sans-serif";
+            ctx.fillStyle = textColor;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(saleText, posX + padX, currentY);
+
+            // Draw Old Strike-through Price
+            if (oldText) {
+                const saleRight = posX + padX + saleWidth + 12;
+                ctx.font = "600 24px 'Inter', sans-serif";
+                ctx.fillStyle = oldTextColor;
+                ctx.fillText(oldText, saleRight, currentY + 2);
+
+                // Strike line
+                ctx.strokeStyle = strikeColor;
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(saleRight - 2, currentY + 3);
+                ctx.lineTo(saleRight + oldWidth + 4, currentY + 1);
+                ctx.stroke();
+            }
+
             ctx.restore();
         }
 
@@ -1013,8 +1356,7 @@
                 ctx.shadowColor = 'rgba(0,0,0,0.35)';
                 ctx.shadowBlur = 12;
                 ctx.shadowOffsetY = 4;
-                ctx.beginPath();
-                ctx.roundRect(pillX, pillY, pillW, pillH, 25);
+                drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 25);
                 ctx.fill();
 
                 // White Badge Text
@@ -1043,49 +1385,119 @@
             const padding = 70;
             const maxWidth = W - (padding * 2);
 
+            const headlineLines = config.headline ? wrapText(ctx, config.headline, maxWidth) : [];
+            const subLines = config.subheadline ? wrapText(ctx, config.subheadline, maxWidth) : [];
+            const totalTextH = (headlineLines.length * 74) + (subLines.length ? (subLines.length * 42) + 16 : 0);
+
             // Compute Y position based on selection
             let startY;
             if (config.textPosition === 'bottom') {
-                startY = H - (config.hasBranding && config.watermark ? 280 : 220);
+                let bottomMargin = 40;
+                if (config.hasBranding && config.watermark) bottomMargin += 55;
+                if (config.hasSale && config.ctaText) bottomMargin += 86;
+                startY = H - bottomMargin - totalTextH;
             } else if (config.textPosition === 'top') {
-                startY = (config.hasBranding && config.badge ? 180 : 120);
+                startY = (config.hasBranding && config.badge) ? 160 : 110;
             } else {
-                startY = H / 2 - 40;
+                startY = (H - totalTextH) / 2;
             }
 
             // Draw Headline
-            if (config.headline) {
+            if (config.headline && headlineLines.length) {
                 ctx.font = `800 64px ${config.font}`;
                 ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'top';
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
                 ctx.shadowBlur = 18;
                 ctx.shadowOffsetY = 4;
 
-                const lines = wrapText(ctx, config.headline, maxWidth);
-                lines.forEach((line, i) => {
+                headlineLines.forEach((line, i) => {
                     ctx.fillText(line, W / 2, startY + (i * 74));
                 });
 
-                startY += (lines.length * 74) + 16;
+                startY += (headlineLines.length * 74) + 16;
             }
 
             // Draw Sub-headline
-            if (config.subheadline) {
+            if (config.subheadline && subLines.length) {
                 ctx.font = `600 32px 'Inter', sans-serif`;
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'top';
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
                 ctx.shadowBlur = 12;
                 ctx.shadowOffsetY = 2;
 
-                const subLines = wrapText(ctx, config.subheadline, maxWidth);
                 subLines.forEach((line, i) => {
                     ctx.fillText(line, W / 2, startY + (i * 42));
                 });
             }
+
+            ctx.restore();
+        }
+
+        function drawCtaButton(W, H) {
+            if (!config.hasSale || !config.ctaText) return;
+
+            ctx.save();
+            const ctaText = config.ctaText.trim();
+            ctx.font = "800 30px 'Plus Jakarta Sans', sans-serif";
+            const textMetrics = ctx.measureText(ctaText);
+            const textW = textMetrics.width;
+
+            const btnH = 76;
+            const btnW = Math.max(340, Math.min(640, textW + 90));
+            const btnX = (W - btnW) / 2;
+            const btnY = (config.hasBranding && config.watermark) ? (H - 146) : (H - 96);
+
+            // Glow Shadow
+            ctx.shadowBlur = 24;
+            ctx.shadowOffsetY = 8;
+
+            let grad = ctx.createLinearGradient(btnX, btnY, btnX + btnW, btnY + btnH);
+            let textColor = '#ffffff';
+
+            if (config.ctaStyle === 'gold') {
+                ctx.shadowColor = 'rgba(245, 158, 11, 0.45)';
+                grad.addColorStop(0, '#F59E0B');
+                grad.addColorStop(1, '#D97706');
+                textColor = '#18181B';
+            } else if (config.ctaStyle === 'dark') {
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                grad.addColorStop(0, '#27272A');
+                grad.addColorStop(1, '#09090B');
+                textColor = '#ffffff';
+            } else if (config.ctaStyle === 'emerald') {
+                ctx.shadowColor = 'rgba(16, 185, 129, 0.45)';
+                grad.addColorStop(0, '#10B981');
+                grad.addColorStop(1, '#047857');
+                textColor = '#ffffff';
+            } else { // pinterest
+                ctx.shadowColor = 'rgba(230, 0, 35, 0.45)';
+                grad.addColorStop(0, '#E60023');
+                grad.addColorStop(1, '#AD081B');
+                textColor = '#ffffff';
+            }
+
+            // Draw Button Pill
+            ctx.fillStyle = grad;
+            drawRoundedRect(ctx, btnX, btnY, btnW, btnH, 38);
+            ctx.fill();
+
+            // Subtle 3D Top Inner Highlight
+            ctx.shadowColor = 'transparent';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+            ctx.lineWidth = 2;
+            drawRoundedRect(ctx, btnX + 2, btnY + 2, btnW - 4, btnH - 4, 36);
+            ctx.stroke();
+
+            // Draw Text Centered
+            ctx.font = "800 30px 'Plus Jakarta Sans', sans-serif";
+            ctx.fillStyle = textColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(ctaText, btnX + btnW / 2, btnY + btnH / 2 + 1);
 
             ctx.restore();
         }
