@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest Pin Studio - Creator & Business Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f2f5 100%);
+        }
+        .bg-pinterest {
+            background-color: #E60023;
+        }
+        .bg-pinterest:hover {
+            background-color: #ad081b;
+        }
+        .text-pinterest {
+            color: #E60023;
+        }
+        .border-pinterest {
+            border-color: #E60023;
+        }
+        /* Canvas grabbing styles */
+        .cursor-grab {
+            cursor: grab;
+        }
+        .cursor-grabbing {
+            cursor: grabbing;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 p-4 sm:p-6 md:p-10 flex flex-col items-center justify-center">
+
+    <!-- Header & App Bar -->
+    <header class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-50 text-pinterest mb-2 shadow-sm">
+            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.182 0 7.439 2.982 7.439 6.969 0 4.156-2.62 7.502-6.262 7.502-1.222 0-2.373-.635-2.766-1.386l-.754 2.871c-.272 1.039-.997 2.34-1.488 3.136 1.144.348 2.355.535 3.606.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.608 0 12.017 0z"/>
+            </svg>
+        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">Pinterest Pin Studio <span class="text-xs bg-red-100 text-pinterest font-bold px-2.5 py-1 rounded-full uppercase tracking-wider align-middle ml-1">Business Edition</span></h1>
+        <p class="text-sm text-gray-500 mt-1 max-w-lg mx-auto">
+            Create high-converting Pinterest product pins with price tags, shop CTA buttons & smart copy!
+        </p>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="w-full max-w-6xl bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-300">
+        
+        <!-- STEP 1: Upload Dropzone (Visible when no image or user wants to re-upload) -->
+        <section id="uploadSection" class="p-8 sm:p-12 text-center">
+            <div class="relative border-2 border-dashed border-gray-300 hover:border-red-400 rounded-3xl p-8 sm:p-14 bg-gray-50/60 hover:bg-red-50/30 transition duration-200 cursor-pointer group flex flex-col items-center justify-center max-w-xl mx-auto">
+                <input type="file" id="imageInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+                <div class="w-16 h-16 mb-4 rounded-2xl bg-white shadow-sm flex items-center justify-center text-gray-400 group-hover:text-pinterest group-hover:scale-110 transition-all">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-700 group-hover:text-gray-900 mb-1">
+                    Choose an image or drag & drop
+                </h3>
+                <p class="text-xs text-gray-400">JPG, PNG, WebP up to 25MB • Auto-sizes to 2:3 ratio</p>
+            </div>
+        </section>
+
+        <!-- STEP 2: Studio Editor & Preview Layout (Shown after image load) -->
+        <section id="studioSection" class="hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
+            
+            <!-- LEFT PANEL: Pin Preview & Fast 1-Click Download -->
+            <div class="lg:col-span-5 p-6 sm:p-8 bg-gray-50/50 flex flex-col items-center justify-between">
+                <div class="w-full flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-xs font-semibold text-gray-600 tracking-wide uppercase">Pin Preview</span>
+                    </div>
+                    <label for="imageInputSecondary" class="text-xs text-pinterest font-medium hover:underline cursor-pointer flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Change Photo
+                    </label>
+                    <input type="file" id="imageInputSecondary" accept="image/*" class="hidden">
+                </div>
+
+                <!-- Live Canvas Display -->
+                <div class="relative w-full flex flex-col items-center my-auto">
+                    <div class="relative group rounded-2xl overflow-hidden shadow-2xl bg-neutral-900 border border-gray-200">
+                        <!-- Canvas -->
+                        <canvas id="pinCanvas" class="cursor-grab active:cursor-grabbing block transition-transform" style="max-height: 480px; width: auto; object-fit: contain;"></canvas>
+                        
+                        <!-- Drag hint overlay badge -->
+                        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md text-white text-[10px] font-medium px-3 py-1 rounded-full opacity-80 pointer-events-none transition flex items-center gap-1 whitespace-nowrap">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11"/></svg>
+                            Drag to reposition image
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mt-3 text-center" id="aspectRatioLabel">Pinterest Standard (1000 × 1500px • 2:3)</p>
+                </div>
+
+                <!-- Instant Download Section -->
+                <div class="w-full mt-6 space-y-2">
+                    <button id="downloadBtn" class="bg-pinterest text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all w-full flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        <span>Download Pin</span>
+                    </button>
+                    <p class="text-[11px] text-center text-gray-400">High-Resolution Ready • Ready to post right away</p>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: Progressive Disclosure Customization Tools (Optional) -->
+            <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between">
+                <div>
+                    <!-- Section Title & Subhead -->
+                    <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                <span>✨ Customize Pin</span>
+                                <span class="bg-gray-100 text-gray-600 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">Optional</span>
+                            </h2>
+                            <p class="text-xs text-gray-500">Tune framing, typography, or color tones if desired.</p>
+                        </div>
+                        <button id="resetAllBtn" class="text-xs text-gray-400 hover:text-gray-700 font-medium transition">
+                            Reset All
+                        </button>
+                    </div>
+
+                    <!-- Accordion / Control Groups -->
+                    <div class="space-y-4 max-h-[580px] overflow-y-auto pr-1.5">
+
+                        <!-- TOOL 1: Ratio & Framing -->
+                        <div class="border border-gray-200/80 rounded-2xl p-4 bg-white hover:border-gray-300 transition">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                                    <span>📐</span> Canvas & Aspect Ratio
+                                </label>
+                            </div>
+                            
+                            <!-- Ratio Selector -->
+                            <div class="grid grid-cols-3 gap-2 mb-4">
+                                <button type="button" data-ratio="2:3" class="ratio-btn border-2 border-pinterest bg-red-50/50 text-pinterest font-semibold text-xs py-2 rounded-xl text-center transition">
+                                    Pinterest Pin<br><span class="text-[10px] font-normal opacity-75">2:3 (1000×1500)</span>
+                                </button>
+                                <button type="button" data-ratio="9:16" class="ratio-btn border border-gray-200 text-gray-600 hover:border-gray-300 font-semibold text-xs py-2 rounded-xl text-center transition">
+                                    Story / Reels<br><span class="text-[10px] font-normal opacity-75">9:16 (1080×1920)</span>
+                                </button>
+                                <button type="button" data-ratio="1:1" class="ratio-btn border border-gray-200 text-gray-600 hover:border-gray-300 font-semibold text-xs py-2 rounded-xl text-center transition">
+                                    Square Post<br><span class="text-[10px] font-normal opacity-75">1:1 (1080×1080)</span>
+                                </button>
+                            </div>
+
+                            <!-- Fit Style (Cover vs Blur Background) -->
+                            <div class="space-y-3 pt-3 border-t border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-700">Display Mode</span>
+                                    <div class="flex gap-1 bg-gray-100 p-0.5 rounded-lg text-xs">
+                                        <button id="modeCover" class="px-3 py-1 font-semibold rounded-md bg-white shadow-sm text-gray-800">Crop to Fill</button>
+                                        <button id="modeBlur" class="px-3 py-1 font-medium rounded-md text-gray-500 hover:text-gray-900">Blur Backdrop</button>
+                                    </div>
+                                </div>
+
+                                <!-- Zoom & Reset Pan -->
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-medium text-gray-500 whitespace-nowrap">Zoom</span>
+                                    <input type="range" id="zoomSlider" min="1" max="2.5" step="0.05" value="1" class="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600">
+                                    <button id="resetPanBtn" title="Center Image" class="text-xs text-gray-400 hover:text-gray-700 px-2 py-1 bg-gray-100 rounded-md">Center</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 2: Product Sales & Pricing (Price Tag & CTA Button) -->
+                        <div class="border border-red-200/90 rounded-2xl p-4 bg-gradient-to-br from-white to-red-50/20 shadow-sm transition hover:border-red-300">
+                            <div class="flex items-center justify-between">
+                                <label for="enableSaleToggle" class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                    <span>🏷️</span> Price Tag & Shop CTA
+                                    <span class="bg-red-100 text-pinterest text-[9px] font-bold px-1.5 py-0.5 rounded-md">Sales Booster</span>
+                                </label>
+                                <input type="checkbox" id="enableSaleToggle" class="w-4 h-4 text-pinterest rounded border-gray-300 focus:ring-red-400 cursor-pointer">
+                            </div>
+
+                            <!-- Collapsible Content -->
+                            <div id="saleControls" class="hidden mt-4 pt-3 border-t border-gray-100 space-y-3.5">
+                                <div class="grid grid-cols-3 gap-2.5">
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-700 block mb-1">Sale Price</label>
+                                        <input type="text" id="salePriceInput" placeholder="e.g. ₹499" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 font-bold text-gray-900 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-500 block mb-1">Old Price <span class="font-normal">(Crossed)</span></label>
+                                        <input type="text" id="oldPriceInput" placeholder="e.g. ₹999" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 text-gray-400 line-through bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Discount Tag</label>
+                                        <input type="text" id="discountTagInput" placeholder="e.g. 50% OFF" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 uppercase text-red-600 font-semibold bg-white">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Price Badge Style</label>
+                                        <select id="priceBadgeStyleSelect" class="w-full text-xs px-2.5 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                            <option value="modern-red">Pinterest Red Tag</option>
+                                            <option value="gold-luxury">Golden Luxury Tag</option>
+                                            <option value="sleek-dark">Dark Minimal Tag</option>
+                                            <option value="clean-white">Clean White Card</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Price Tag Position</label>
+                                        <select id="priceBadgePosSelect" class="w-full text-xs px-2.5 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                            <option value="top-right">Top Right</option>
+                                            <option value="top-left">Top Left</option>
+                                            <option value="bottom-left">Bottom Left</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- CTA Button Settings -->
+                                <div class="pt-3 border-t border-gray-100 space-y-2.5">
+                                    <label class="text-[11px] font-bold text-gray-700 uppercase tracking-wider block">🛍️ Shop CTA Button</label>
+                                    <div class="grid grid-cols-2 gap-2.5">
+                                        <div>
+                                            <label class="text-[11px] font-semibold text-gray-600 block mb-1">CTA Text</label>
+                                            <input type="text" id="ctaTextInput" placeholder="e.g. SHOP NOW ➔" value="SHOP NOW ➔" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 font-bold bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="text-[11px] font-semibold text-gray-600 block mb-1">Button Color</label>
+                                            <select id="ctaStyleSelect" class="w-full text-xs px-2.5 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                                <option value="pinterest">Pinterest Red</option>
+                                                <option value="gold">Vibrant Amber / Gold</option>
+                                                <option value="dark">Luxe Matte Black</option>
+                                                <option value="emerald">Emerald Green</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5 pt-1">
+                                        <span class="text-[10px] text-gray-400">Quick suggestions:</span>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">SHOP NOW ➔</button>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">BUY NOW 🛍️</button>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">GRAB 50% OFF ⚡</button>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">LINK IN BIO 🔗</button>
+                                        <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">TAP TO ORDER</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 3: Smart Description Converter (AI Copy Assistant) -->
+                        <div class="border border-purple-200/90 rounded-2xl p-4 bg-gradient-to-br from-purple-50/40 via-white to-pink-50/30 shadow-sm transition hover:border-purple-300">
+                            <div class="flex items-center justify-between">
+                                <label for="enableAiCopyToggle" class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                    <span>✨</span> Smart Description Converter
+                                    <span class="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-md tracking-wider">SMART AI</span>
+                                </label>
+                                <input type="checkbox" id="enableAiCopyToggle" class="w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-400 cursor-pointer">
+                            </div>
+
+                            <!-- Collapsible Content -->
+                            <div id="aiCopyControls" class="hidden mt-4 pt-3 border-t border-purple-100 space-y-3">
+                                <p class="text-xs text-gray-500 leading-relaxed">
+                                    Paste raw product description or notes below. It transforms them into viral Pinterest hooks, headlines, and SEO captions automatically!
+                                </p>
+
+                                <div>
+                                    <textarea id="rawProductDesc" rows="3" placeholder="e.g. Women printed cotton kurti, breathable fabric, floral pattern, size S to XXL, summer collection, price ₹499, free delivery..." class="w-full text-xs p-3 border border-gray-200 rounded-xl focus:outline-none focus:border-purple-400 bg-white leading-relaxed resize-none"></textarea>
+                                </div>
+
+                                <div class="flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-[11px] font-semibold text-gray-600">Tone:</span>
+                                        <select id="copyToneSelect" class="text-xs px-2.5 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400 bg-white">
+                                            <option value="viral">🔥 Viral Hook & Trend</option>
+                                            <option value="luxury">💎 Luxury & Aesthetic</option>
+                                            <option value="sale">⚡ Urgency & Huge Deal</option>
+                                            <option value="benefits">🌿 Clean & Benefit-Focused</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" id="generateCopyBtn" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-1.5">
+                                        <span>🪄 Convert Copy</span>
+                                    </button>
+                                </div>
+
+                                <!-- Generated Suggestions List -->
+                                <div id="copyResultsContainer" class="hidden space-y-2.5 pt-2">
+                                    <div class="text-[11px] font-bold text-gray-700 uppercase tracking-wider flex items-center justify-between">
+                                        <span>Generated Pin Hooks</span>
+                                        <span class="text-[10px] text-purple-600 font-normal">Click "Apply" to instantly update pin</span>
+                                    </div>
+                                    <div id="copyOptionsList" class="space-y-2">
+                                        <!-- Dynamically generated hook cards -->
+                                    </div>
+
+                                    <!-- SEO Caption & Hashtags Block -->
+                                    <div class="p-3 bg-white/90 border border-purple-100 rounded-xl space-y-2">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-[11px] font-bold text-gray-800">📌 Pinterest SEO Caption & Tags</span>
+                                            <button type="button" id="copyCaptionBtn" class="text-[10px] bg-purple-50 hover:bg-purple-100 text-purple-700 font-semibold px-2 py-1 rounded-md transition flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                                <span>Copy Caption</span>
+                                            </button>
+                                        </div>
+                                        <p id="generatedCaptionText" class="text-[11px] text-gray-600 font-mono whitespace-pre-wrap leading-relaxed max-h-24 overflow-y-auto bg-gray-50 p-2 rounded-lg"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 4: Typography & Viral Text Hook (OPT-IN TOGGLE) -->
+                        <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
+                            <div class="flex items-center justify-between">
+                                <label for="enableTextToggle" class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                    <span>✍️</span> Add Text & Headline
+                                </label>
+                                <input type="checkbox" id="enableTextToggle" class="w-4 h-4 text-pinterest rounded border-gray-300 focus:ring-red-400 cursor-pointer">
+                            </div>
+
+                            <!-- Collapsible Content -->
+                            <div id="textControls" class="hidden mt-4 pt-3 border-t border-gray-100 space-y-3">
+                                <div>
+                                    <label class="text-[11px] font-semibold text-gray-600 block mb-1">Main Headline</label>
+                                    <input type="text" id="headlineInput" placeholder="e.g., 10 Ideas That Will Change Your Morning" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-semibold text-gray-600 block mb-1">Sub-headline / Tagline</label>
+                                    <input type="text" id="subheadlineInput" placeholder="e.g., Easy step-by-step aesthetic routine" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Font Family</label>
+                                        <select id="fontSelect" class="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                            <option value="'Playfair Display', serif">Luxury Serif (Playfair)</option>
+                                            <option value="'Plus Jakarta Sans', sans-serif">Modern Bold (Jakarta)</option>
+                                            <option value="'Inter', sans-serif">Clean Minimal (Inter)</option>
+                                            <option value="'Dancing Script', cursive">Handwritten Script</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Position</label>
+                                        <select id="textPosSelect" class="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                            <option value="bottom">Bottom Overlay</option>
+                                            <option value="center">Center Focus</option>
+                                            <option value="top">Top Header</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-1">
+                                    <label class="text-xs text-gray-600 flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="scrimToggle" checked class="w-3.5 h-3.5 text-pinterest rounded border-gray-300">
+                                        <span>Dark gradient shadow (for text readability)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 5: Aesthetic Filters (OPTIONAL) -->
+                        <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
+                            <label class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 mb-3">
+                                <span>🎨</span> Aesthetic Filter
+                            </label>
+                            <div class="grid grid-cols-5 gap-1.5">
+                                <button type="button" data-filter="none" class="filter-btn text-[11px] py-1.5 rounded-lg border-2 border-pinterest bg-red-50 text-pinterest font-medium text-center">Original</button>
+                                <button type="button" data-filter="warm" class="filter-btn text-[11px] py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 font-medium text-center">Warm</button>
+                                <button type="button" data-filter="vibrant" class="filter-btn text-[11px] py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 font-medium text-center">Vibrant</button>
+                                <button type="button" data-filter="moody" class="filter-btn text-[11px] py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 font-medium text-center">Moody</button>
+                                <button type="button" data-filter="bw" class="filter-btn text-[11px] py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-gray-300 font-medium text-center">B & W</button>
+                            </div>
+                        </div>
+
+                        <!-- TOOL 6: Brand Badge & Watermark (OPT-IN TOGGLE) -->
+                        <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
+                            <div class="flex items-center justify-between">
+                                <label for="enableBrandingToggle" class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                    <span>🏷️</span> Badge & Website Watermark
+                                </label>
+                                <input type="checkbox" id="enableBrandingToggle" class="w-4 h-4 text-pinterest rounded border-gray-300 focus:ring-red-400 cursor-pointer">
+                            </div>
+
+                            <div id="brandingControls" class="hidden mt-4 pt-3 border-t border-gray-100 space-y-3">
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Badge Tag</label>
+                                        <input type="text" id="badgeInput" placeholder="e.g. MUST TRY, NEW" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 uppercase">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Website or Handle</label>
+                                        <input type="text" id="watermarkInput" placeholder="e.g. yoursite.com" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Footer Tip -->
+                <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                    <span>💡 Tip: Leave text & badge unchecked for pure clean photo pins.</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JavaScript Engine -->
+    <script>
+        // DOM Elements
+        const imageInput = document.getElementById('imageInput');
+        const imageInputSecondary = document.getElementById('imageInputSecondary');
+        const uploadSection = document.getElementById('uploadSection');
+        const studioSection = document.getElementById('studioSection');
+        const canvas = document.getElementById('pinCanvas');
+        const ctx = canvas.getContext('2d');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const aspectRatioLabel = document.getElementById('aspectRatioLabel');
+
+        // Framing & Zoom Controls
+        const zoomSlider = document.getElementById('zoomSlider');
+        const resetPanBtn = document.getElementById('resetPanBtn');
+        const modeCoverBtn = document.getElementById('modeCover');
+        const modeBlurBtn = document.getElementById('modeBlur');
+        const ratioBtns = document.querySelectorAll('.ratio-btn');
+
+        // Product Sales & Pricing Controls
+        const enableSaleToggle = document.getElementById('enableSaleToggle');
+        const saleControls = document.getElementById('saleControls');
+        const salePriceInput = document.getElementById('salePriceInput');
+        const oldPriceInput = document.getElementById('oldPriceInput');
+        const discountTagInput = document.getElementById('discountTagInput');
+        const priceBadgeStyleSelect = document.getElementById('priceBadgeStyleSelect');
+        const priceBadgePosSelect = document.getElementById('priceBadgePosSelect');
+        const ctaTextInput = document.getElementById('ctaTextInput');
+        const ctaStyleSelect = document.getElementById('ctaStyleSelect');
+        const quickCtaBtns = document.querySelectorAll('.quick-cta');
+
+        // Smart Copy Assistant Controls
+        const enableAiCopyToggle = document.getElementById('enableAiCopyToggle');
+        const aiCopyControls = document.getElementById('aiCopyControls');
+        const rawProductDesc = document.getElementById('rawProductDesc');
+        const copyToneSelect = document.getElementById('copyToneSelect');
+        const generateCopyBtn = document.getElementById('generateCopyBtn');
+        const copyResultsContainer = document.getElementById('copyResultsContainer');
+        const copyOptionsList = document.getElementById('copyOptionsList');
+        const copyCaptionBtn = document.getElementById('copyCaptionBtn');
+        const generatedCaptionText = document.getElementById('generatedCaptionText');
+
+        // Text & Branding Controls
+        const enableTextToggle = document.getElementById('enableTextToggle');
+        const textControls = document.getElementById('textControls');
+        const headlineInput = document.getElementById('headlineInput');
+        const subheadlineInput = document.getElementById('subheadlineInput');
+        const fontSelect = document.getElementById('fontSelect');
+        const textPosSelect = document.getElementById('textPosSelect');
+        const scrimToggle = document.getElementById('scrimToggle');
+
+        // Filter Controls
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // Branding Controls
+        const enableBrandingToggle = document.getElementById('enableBrandingToggle');
+        const brandingControls = document.getElementById('brandingControls');
+        const badgeInput = document.getElementById('badgeInput');
+        const watermarkInput = document.getElementById('watermarkInput');
+        const resetAllBtn = document.getElementById('resetAllBtn');
+
+        // State Machine
+        let uploadedImg = null;
+        let config = {
+            width: 1000,
+            height: 1500,
+            ratioLabel: '2:3 (1000 × 1500px)',
+            fitMode: 'cover', // 'cover' or 'blur'
+            zoom: 1.0,
+            panX: 0,
+            panY: 0,
+            filter: 'none',
+            // Text Layer
+            hasText: false,
+            headline: '',
+            subheadline: '',
+            font: "'Playfair Display', serif",
+            textPosition: 'bottom',
+            hasScrim: true,
+            // Branding Layer
+            hasBranding: false,
+            badge: '',
+            watermark: '',
+            // Product Sales & CTA Layer
+            hasSale: false,
+            salePrice: '',
+            oldPrice: '',
+            discountTag: '',
+            priceStyle: 'modern-red',
+            pricePosition: 'top-right',
+            ctaText: 'SHOP NOW ➔',
+            ctaStyle: 'pinterest'
+        };
+
+        // Initialize Canvas Size
+        canvas.width = config.width;
+        canvas.height = config.height;
+
+        // --- File Upload Listeners ---
+        [imageInput, imageInputSecondary].forEach(input => {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) handleImageFile(file);
+            });
+        });
+
+        // Drag & Drop onto Upload Section
+        uploadSection.addEventListener('dragover', (e) => { e.preventDefault(); });
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handleImageFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleImageFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    uploadedImg = img;
+                    // Reset pan offsets for fresh image
+                    config.panX = 0;
+                    config.panY = 0;
+                    config.zoom = 1.0;
+                    zoomSlider.value = 1.0;
+
+                    uploadSection.classList.add('hidden');
+                    studioSection.classList.remove('hidden');
+                    render();
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // --- Aspect Ratio Buttons ---
+        ratioBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                ratioBtns.forEach(b => {
+                    b.classList.remove('border-pinterest', 'bg-red-50/50', 'text-pinterest');
+                    b.classList.add('border-gray-200', 'text-gray-600');
+                });
+                btn.classList.add('border-pinterest', 'bg-red-50/50', 'text-pinterest');
+                btn.classList.remove('border-gray-200', 'text-gray-600');
+
+                const ratio = btn.dataset.ratio;
+                if (ratio === '2:3') {
+                    config.width = 1000;
+                    config.height = 1500;
+                    config.ratioLabel = 'Pinterest Standard (1000 × 1500px • 2:3)';
+                } else if (ratio === '9:16') {
+                    config.width = 1080;
+                    config.height = 1920;
+                    config.ratioLabel = 'Story / Reels (1080 × 1920px • 9:16)';
+                } else if (ratio === '1:1') {
+                    config.width = 1080;
+                    config.height = 1080;
+                    config.ratioLabel = 'Square Post (1080 × 1080px • 1:1)';
+                }
+                canvas.width = config.width;
+                canvas.height = config.height;
+                aspectRatioLabel.textContent = config.ratioLabel;
+                render();
+            });
+        });
+
+        // --- Fit Mode (Cover vs Blur) ---
+        modeCoverBtn.addEventListener('click', () => {
+            config.fitMode = 'cover';
+            modeCoverBtn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
+            modeCoverBtn.classList.remove('text-gray-500');
+            modeBlurBtn.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
+            modeBlurBtn.classList.add('text-gray-500');
+            render();
+        });
+
+        modeBlurBtn.addEventListener('click', () => {
+            config.fitMode = 'blur';
+            modeBlurBtn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
+            modeBlurBtn.classList.remove('text-gray-500');
+            modeCoverBtn.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
+            modeCoverBtn.classList.add('text-gray-500');
+            render();
+        });
+
+        // --- Zoom & Pan Slider ---
+        zoomSlider.addEventListener('input', (e) => {
+            config.zoom = parseFloat(e.target.value);
+            render();
+        });
+
+        resetPanBtn.addEventListener('click', () => {
+            config.panX = 0;
+            config.panY = 0;
+            config.zoom = 1.0;
+            zoomSlider.value = 1.0;
+            render();
+        });
+
+        // --- Filter Buttons ---
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('border-2', 'border-pinterest', 'bg-red-50', 'text-pinterest');
+                    b.classList.add('border', 'border-gray-200', 'text-gray-600');
+                });
+                btn.classList.add('border-2', 'border-pinterest', 'bg-red-50', 'text-pinterest');
+                btn.classList.remove('border', 'border-gray-200', 'text-gray-600');
+                config.filter = btn.dataset.filter;
+                render();
+            });
+        });
+
+        // --- Product Sales & CTA Listeners ---
+        enableSaleToggle.addEventListener('change', (e) => {
+            config.hasSale = e.target.checked;
+            saleControls.classList.toggle('hidden', !config.hasSale);
+            render();
+        });
+
+        salePriceInput.addEventListener('input', (e) => {
+            config.salePrice = e.target.value.trim();
+            render();
+        });
+
+        oldPriceInput.addEventListener('input', (e) => {
+            config.oldPrice = e.target.value.trim();
+            render();
+        });
+
+        discountTagInput.addEventListener('input', (e) => {
+            config.discountTag = e.target.value.trim();
+            render();
+        });
+
+        priceBadgeStyleSelect.addEventListener('change', (e) => {
+            config.priceStyle = e.target.value;
+            render();
+        });
+
+        priceBadgePosSelect.addEventListener('change', (e) => {
+            config.pricePosition = e.target.value;
+            render();
+        });
+
+        ctaTextInput.addEventListener('input', (e) => {
+            config.ctaText = e.target.value.trim();
+            render();
+        });
+
+        ctaStyleSelect.addEventListener('change', (e) => {
+            config.ctaStyle = e.target.value;
+            render();
+        });
+
+        quickCtaBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const text = btn.textContent.trim();
+                ctaTextInput.value = text;
+                config.ctaText = text;
+                render();
+            });
+        });
+
+        // --- Smart Description Converter & Copy Generator ---
+        enableAiCopyToggle.addEventListener('change', (e) => {
+            aiCopyControls.classList.toggle('hidden', !e.target.checked);
+        });
+
+        generateCopyBtn.addEventListener('click', () => {
+            const raw = rawProductDesc.value.trim();
+            if (!raw) {
+                alert('Please paste a product description or details first!');
+                rawProductDesc.focus();
+                return;
+            }
+
+            const tone = copyToneSelect.value;
+            generateProductHooks(raw, tone);
+        });
+
+        function parseProductDetails(raw) {
+            // Price regex (₹, Rs, INR, $, etc.)
+            let price = '';
+            const priceRegex = /(?:₹|rs\.?|inr|\$)\s*(\d+[\d,]*(?:\.\d{2})?)/i;
+            const priceRegex2 = /(\d+[\d,]*)\s*(?:rs|rupees|inr|\/-)/i;
+            let m = raw.match(priceRegex);
+            if (m) {
+                price = (m[0].includes('$') ? '$' : '₹') + m[1].replace(/,/g, '');
+            } else {
+                m = raw.match(priceRegex2);
+                if (m) price = '₹' + m[1].replace(/,/g, '');
+            }
+
+            // Discount regex
+            let discount = '';
+            const discRegex = /(\d{1,2}%\s*(?:off|discount)?|flat\s*\d{1,2}%)/i;
+            const dm = raw.match(discRegex);
+            if (dm) discount = dm[0].toUpperCase().includes('OFF') ? dm[0].toUpperCase() : dm[0].toUpperCase() + ' OFF';
+
+            // Clean keywords
+            const lower = raw.toLowerCase();
+            const productKeywords = [
+                'kurti', 'saree', 'dress', 'gown', 'lehenga', 'shirt', 't-shirt', 'tshirt',
+                'jeans', 'hoodie', 'jacket', 'top', 'blouse', 'necklace', 'earrings', 'jewelry',
+                'ring', 'bracelet', 'bangle', 'handbag', 'bag', 'tote', 'backpack', 'wallet',
+                'shoes', 'sneakers', 'heels', 'sandals', 'watch', 'sunglasses', 'serum', 'cream',
+                'lipstick', 'perfume', 'sunscreen', 'lamp', 'rug', 'decor', 'organizer', 'bottle',
+                'earbuds', 'case', 'headphones', 'pillow'
+            ];
+
+            let detectedProduct = '';
+            for (const kw of productKeywords) {
+                if (new RegExp('\\b' + kw + 's?\\b', 'i').test(lower)) {
+                    detectedProduct = kw.charAt(0).toUpperCase() + kw.slice(1);
+                    break;
+                }
+            }
+
+            // If no specific noun matched, take first 2-3 words as item title
+            if (!detectedProduct) {
+                const words = raw.split(/[\n,.]+/)[0].trim().split(/\s+/).slice(0, 3);
+                detectedProduct = words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            }
+
+            // Extract features / materials
+            const featureKws = [
+                'cotton', 'silk', 'linen', 'denim', 'leather', 'breathable', 'handmade', 'handcrafted',
+                'organic', 'pure', 'oversized', 'floral', 'embroidered', 'printed', 'vintage',
+                'waterproof', 'wireless', 'durable', 'comfortable', 'casual', 'festive', 'luxury',
+                'lightweight', 'premium', 'soft', 'anti-tarnish', 'gold plated', 'aesthetic',
+                'free delivery', 'cash on delivery'
+            ];
+            const foundFeatures = [];
+            featureKws.forEach(f => {
+                if (lower.includes(f)) {
+                    foundFeatures.push(f.charAt(0).toUpperCase() + f.slice(1));
+                }
+            });
+
+            return {
+                raw,
+                price,
+                discount,
+                product: detectedProduct || 'Product',
+                features: foundFeatures.length ? foundFeatures.slice(0, 4) : ['Premium Quality', 'Trending Design', 'Comfortable Fit']
+            };
+        }
+
+        function generateProductHooks(raw, tone) {
+            const data = parseProductDetails(raw);
+            const prod = data.product;
+            const feat1 = data.features[0] || 'Premium Quality';
+            const feat2 = data.features[1] || 'Timeless Style';
+            const priceTag = data.price ? `Under ${data.price}` : 'Special Launch Price';
+
+            let options = [];
+
+            if (tone === 'viral') {
+                options = [
+                    {
+                        headline: `The Viral ${prod} You Need Now ✨`,
+                        subheadline: `Aesthetic, comfortable & ${priceTag} — selling fast!`
+                    },
+                    {
+                        headline: `Stop Scrolling: This ${prod} Just Dropped 🔥`,
+                        subheadline: `Upgrade your daily wardrobe with effortless chic vibes`
+                    },
+                    {
+                        headline: `Everyone Is Obsessed With This ${prod}`,
+                        subheadline: `High quality, breathtaking fit & 100% aesthetic appeal`
+                    }
+                ];
+            } else if (tone === 'luxury') {
+                options = [
+                    {
+                        headline: `Pure Elegance: Handcrafted ${prod}`,
+                        subheadline: `Designed with ${feat1.toLowerCase()} for timeless sophistication`
+                    },
+                    {
+                        headline: `The ${prod} Edit: Effortless Luxury`,
+                        subheadline: `Curated for those who appreciate understated beauty`
+                    },
+                    {
+                        headline: `Unmatched Perfection: Signature ${prod}`,
+                        subheadline: `Luxurious comfort crafted for your most memorable moments`
+                    }
+                ];
+            } else if (tone === 'sale') {
+                options = [
+                    {
+                        headline: `🔥 MASSIVE SALE: Limited Time On ${prod}!`,
+                        subheadline: `${data.discount || 'Huge Discount'} Today Only! Grab yours before sold out`
+                    },
+                    {
+                        headline: `Flash Deal Alert: ${prod} On Sale`,
+                        subheadline: `Premium quality at unbeatable price. Tap to claim deal 🛍️`
+                    },
+                    {
+                        headline: `Last Few Left: Grab Your ${prod} Today!`,
+                        subheadline: `Free delivery & instant checkout — don't miss out!`
+                    }
+                ];
+            } else { // benefits / clean
+                options = [
+                    {
+                        headline: `Meet Your New Favorite ${prod}`,
+                        subheadline: `${feat1}, ${feat2.toLowerCase()} & crafted for all-day comfort`
+                    },
+                    {
+                        headline: `The Only ${prod} You'll Ever Need`,
+                        subheadline: `Simple, timeless design that looks good with everything`
+                    },
+                    {
+                        headline: `Upgrade Your Everyday: ${prod}`,
+                        subheadline: `Breathable, durable & thoughtfully made for you`
+                    }
+                ];
+            }
+
+            // Render options
+            copyOptionsList.innerHTML = '';
+            options.forEach((opt) => {
+                const card = document.createElement('div');
+                card.className = "p-3 bg-white border border-purple-100 hover:border-purple-300 rounded-xl transition shadow-xs flex items-center justify-between gap-2";
+                card.innerHTML = `
+                    <div class="flex-1 pr-1">
+                        <p class="text-xs font-bold text-gray-900 leading-tight">"${opt.headline}"</p>
+                        <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">${opt.subheadline}</p>
+                    </div>
+                    <button type="button" class="apply-hook-btn shrink-0 bg-purple-50 hover:bg-purple-100 text-purple-700 hover:text-purple-900 border border-purple-200 text-[11px] font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 active:scale-95">
+                        <span>⚡ Apply</span>
+                    </button>
+                `;
+
+                // Handle click on Apply
+                card.querySelector('.apply-hook-btn').addEventListener('click', (e) => {
+                    // Update headline & subheadline
+                    config.headline = opt.headline;
+                    config.subheadline = opt.subheadline;
+                    headlineInput.value = opt.headline;
+                    subheadlineInput.value = opt.subheadline;
+
+                    // Turn on text layer
+                    config.hasText = true;
+                    enableTextToggle.checked = true;
+                    textControls.classList.remove('hidden');
+
+                    // If price detected in description, populate price controls automatically!
+                    if (data.price) {
+                        config.salePrice = data.price;
+                        salePriceInput.value = data.price;
+                        config.hasSale = true;
+                        enableSaleToggle.checked = true;
+                        saleControls.classList.remove('hidden');
+                    }
+                    if (data.discount) {
+                        config.discountTag = data.discount;
+                        discountTagInput.value = data.discount;
+                    }
+
+                    render();
+
+                    // Button visual feedback
+                    const btn = e.currentTarget;
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span>✓ Applied!</span>';
+                    btn.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.classList.remove('bg-green-100', 'text-green-800', 'border-green-300');
+                    }, 1800);
+                });
+
+                copyOptionsList.appendChild(card);
+            });
+
+            // Generate SEO Caption & Hashtags
+            const tagClean = prod.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const captionLines = [
+                `Looking for the perfect ${prod.toLowerCase()}? ✨`,
+                ``,
+                `Upgrade your style with our top-rated ${prod.toLowerCase()}. Designed with premium materials for maximum comfort and an irresistible aesthetic appeal!`,
+                ``,
+                `✨ Why you'll love it:`,
+                `✔ ${data.features[0] || 'Premium Quality'}`,
+                `✔ ${data.features[1] || 'Timeless aesthetic & versatile fit'}`,
+                data.price ? `✔ Special Price: ${data.price}` : `✔ Exclusive collection`,
+                `✔ Fast delivery & easy checkout 🚚`,
+                ``,
+                `👉 Tap the pin or visit our store link to shop now! 🛍️`,
+                ``,
+                `#pinterestfinds #shoppin #${tagClean} #${tagClean}style #aestheticfashion #ootd #musthave #trendingnow #pinterestshopping`
+            ];
+
+            generatedCaptionText.textContent = captionLines.join('\n');
+            copyResultsContainer.classList.remove('hidden');
+        }
+
+        // Copy Caption to Clipboard
+        copyCaptionBtn.addEventListener('click', () => {
+            const text = generatedCaptionText.textContent;
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                copyCaptionBtn.innerHTML = `
+                    <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="text-green-700">Copied! ✓</span>
+                `;
+                setTimeout(() => {
+                    copyCaptionBtn.innerHTML = `
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <span>Copy Caption</span>
+                    `;
+                }, 2000);
+            });
+        });
+
+        // --- Optional Text Layer Toggle ---
+        enableTextToggle.addEventListener('change', (e) => {
+            config.hasText = e.target.checked;
+            textControls.classList.toggle('hidden', !config.hasText);
+            render();
+        });
+
+        headlineInput.addEventListener('input', (e) => { config.headline = e.target.value; render(); });
+        subheadlineInput.addEventListener('input', (e) => { config.subheadline = e.target.value; render(); });
+        fontSelect.addEventListener('change', (e) => { config.font = e.target.value; render(); });
+        textPosSelect.addEventListener('change', (e) => { config.textPosition = e.target.value; render(); });
+        scrimToggle.addEventListener('change', (e) => { config.hasScrim = e.target.checked; render(); });
+
+        // --- Optional Branding Layer Toggle ---
+        enableBrandingToggle.addEventListener('change', (e) => {
+            config.hasBranding = e.target.checked;
+            brandingControls.classList.toggle('hidden', !config.hasBranding);
+            render();
+        });
+
+        badgeInput.addEventListener('input', (e) => { config.badge = e.target.value.trim(); render(); });
+        watermarkInput.addEventListener('input', (e) => { config.watermark = e.target.value.trim(); render(); });
+
+        // --- Reset All Button ---
+        resetAllBtn.addEventListener('click', () => {
+            // Reset Text
+            enableTextToggle.checked = false;
+            config.hasText = false;
+            textControls.classList.add('hidden');
+            headlineInput.value = '';
+            subheadlineInput.value = '';
+
+            // Reset Branding
+            enableBrandingToggle.checked = false;
+            config.hasBranding = false;
+            brandingControls.classList.add('hidden');
+            badgeInput.value = '';
+            watermarkInput.value = '';
+
+            // Reset Sale & CTA
+            enableSaleToggle.checked = false;
+            config.hasSale = false;
+            saleControls.classList.add('hidden');
+            salePriceInput.value = '';
+            oldPriceInput.value = '';
+            discountTagInput.value = '';
+            ctaTextInput.value = 'SHOP NOW ➔';
+            config.salePrice = '';
+            config.oldPrice = '';
+            config.discountTag = '';
+            config.ctaText = 'SHOP NOW ➔';
+            config.priceStyle = 'modern-red';
+            config.pricePosition = 'top-right';
+            config.ctaStyle = 'pinterest';
+            priceBadgeStyleSelect.value = 'modern-red';
+            priceBadgePosSelect.value = 'top-right';
+            ctaStyleSelect.value = 'pinterest';
+
+            // Reset AI Copy
+            enableAiCopyToggle.checked = false;
+            aiCopyControls.classList.add('hidden');
+            rawProductDesc.value = '';
+            copyOptionsList.innerHTML = '';
+            copyResultsContainer.classList.add('hidden');
+
+            config.filter = 'none';
+            filterBtns[0].click();
+
+            config.fitMode = 'cover';
+            modeCoverBtn.click();
+
+            config.panX = 0;
+            config.panY = 0;
+            config.zoom = 1.0;
+            zoomSlider.value = 1.0;
+
+            render();
+        });
+
+        // --- Interactive Mouse & Touch Drag on Canvas ---
+        let isDragging = false;
+        let startX, startY;
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaX = (e.clientX - startX) * (config.width / canvas.clientWidth);
+            const deltaY = (e.clientY - startY) * (config.height / canvas.clientHeight);
+            startX = e.clientX;
+            startY = e.clientY;
+            config.panX += deltaX;
+            config.panY += deltaY;
+            render();
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // Touch support for mobile dragging
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }
+        });
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging || e.touches.length !== 1) return;
+            const deltaX = (e.touches[0].clientX - startX) * (config.width / canvas.clientWidth);
+            const deltaY = (e.touches[0].clientY - startY) * (config.height / canvas.clientHeight);
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            config.panX += deltaX;
+            config.panY += deltaY;
+            render();
+        });
+        window.addEventListener('touchend', () => { isDragging = false; });
+
+
+        // ==========================================
+        // MAIN CANVAS RENDER PIPELINE
+        // ==========================================
+        function render() {
+            if (!uploadedImg) return;
+
+            const W = config.width;
+            const H = config.height;
+
+            // Clear Background
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, W, H);
+
+            // 1. Draw Image Layer (Fit or Cover)
+            drawImageLayer(W, H);
+
+            // 2. Scrim (Gradient for text and/or bottom CTA readability)
+            if ((config.hasText && config.hasScrim) || (config.hasSale && config.ctaText)) {
+                drawGradientScrim(W, H);
+            }
+
+            // 3. Price Badge Layer (if enabled & sale price provided)
+            if (config.hasSale && config.salePrice) {
+                drawPriceBadge(W, H);
+            }
+
+            // 4. Branding / Badge Layer
+            if (config.hasBranding) {
+                drawBrandingLayer(W, H);
+            }
+
+            // 5. Text Overlay Layer
+            if (config.hasText && (config.headline || config.subheadline)) {
+                drawTextLayer(W, H);
+            }
+
+            // 6. Shop CTA Button Layer
+            if (config.hasSale && config.ctaText) {
+                drawCtaButton(W, H);
+            }
+        }
+
+        // Helper: Safe Rounded Rect
+        function drawRoundedRect(context, x, y, width, height, radius) {
+            if (context.roundRect) {
+                context.beginPath();
+                context.roundRect(x, y, width, height, radius);
+                return;
+            }
+            context.beginPath();
+            context.moveTo(x + radius, y);
+            context.lineTo(x + width - radius, y);
+            context.quadraticCurveTo(x + width, y, x + width, y + radius);
+            context.lineTo(x + width, y + height - radius);
+            context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            context.lineTo(x + radius, y + height);
+            context.quadraticCurveTo(x, y + height, x, y + height - radius);
+            context.lineTo(x, y + radius);
+            context.quadraticCurveTo(x, y, x + radius, y);
+            context.closePath();
+        }
+
+        function getFilterString(filter) {
+            switch(filter) {
+                case 'warm': return 'sepia(0.25) saturate(1.2) brightness(1.05)';
+                case 'vibrant': return 'contrast(1.15) saturate(1.35)';
+                case 'moody': return 'contrast(1.2) brightness(0.9) saturate(0.85)';
+                case 'bw': return 'grayscale(1) contrast(1.25)';
+                default: return 'none';
+            }
+        }
+
+        function drawImageLayer(W, H) {
+            const imgAspect = uploadedImg.width / uploadedImg.height;
+            const canvasAspect = W / H;
+
+            // If Blur Backdrop Mode is active
+            if (config.fitMode === 'blur') {
+                ctx.save();
+                ctx.filter = 'blur(45px) brightness(0.85)';
+                ctx.drawImage(uploadedImg, -50, -50, W + 100, H + 100);
+                ctx.restore();
+
+                // Draw sharp contained image on top
+                ctx.save();
+                ctx.filter = getFilterString(config.filter);
+                let drawW, drawH;
+                if (imgAspect > canvasAspect) {
+                    drawW = W * config.zoom;
+                    drawH = (W / imgAspect) * config.zoom;
+                } else {
+                    drawH = H * config.zoom;
+                    drawW = (H * imgAspect) * config.zoom;
+                }
+                const posX = ((W - drawW) / 2) + config.panX;
+                const posY = ((H - drawH) / 2) + config.panY;
+                ctx.drawImage(uploadedImg, posX, posY, drawW, drawH);
+                ctx.restore();
+                return;
+            }
+
+            // Standard "Crop to Fill / Cover" Mode
+            let baseW, baseH;
+            if (imgAspect > canvasAspect) {
+                baseH = H;
+                baseW = uploadedImg.width * (H / uploadedImg.height);
+            } else {
+                baseW = W;
+                baseH = uploadedImg.height * (W / uploadedImg.width);
+            }
+
+            const drawW = baseW * config.zoom;
+            const drawH = baseH * config.zoom;
+            const posX = ((W - drawW) / 2) + config.panX;
+            const posY = ((H - drawH) / 2) + config.panY;
+
+            ctx.save();
+            ctx.filter = getFilterString(config.filter);
+            ctx.drawImage(uploadedImg, posX, posY, drawW, drawH);
+            ctx.restore();
+        }
+
+        function drawGradientScrim(W, H) {
+            ctx.save();
+            const grad = ctx.createLinearGradient(0, 0, 0, H);
+            if (config.textPosition === 'bottom' || (config.hasSale && config.ctaText)) {
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(0.45, 'rgba(0,0,0,0.05)');
+                grad.addColorStop(0.75, 'rgba(0,0,0,0.55)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.88)');
+            } else if (config.textPosition === 'top') {
+                grad.addColorStop(0, 'rgba(0,0,0,0.85)');
+                grad.addColorStop(0.55, 'rgba(0,0,0,0.1)');
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+            } else {
+                // Center
+                grad.addColorStop(0, 'rgba(0,0,0,0.2)');
+                grad.addColorStop(0.5, 'rgba(0,0,0,0.75)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.2)');
+            }
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+        }
+
+        function drawPriceBadge(W, H) {
+            if (!config.hasSale || !config.salePrice) return;
+
+            ctx.save();
+            const saleText = config.salePrice.trim();
+            const oldText = config.oldPrice ? config.oldPrice.trim() : '';
+            const discountText = config.discountTag ? config.discountTag.trim().toUpperCase() : '';
+
+            // Calculate dimensions
+            ctx.font = "800 42px 'Plus Jakarta Sans', sans-serif";
+            const saleWidth = ctx.measureText(saleText).width;
+
+            ctx.font = "600 24px 'Inter', sans-serif";
+            const oldWidth = oldText ? ctx.measureText(oldText).width : 0;
+
+            ctx.font = "bold 16px 'Plus Jakarta Sans', sans-serif";
+            const discountWidth = discountText ? ctx.measureText(discountText).width : 0;
+
+            const padX = 26;
+            const padY = 18;
+            const contentW = Math.max(saleWidth + (oldWidth ? oldWidth + 14 : 0), discountWidth + 16);
+            const badgeW = Math.max(210, contentW + (padX * 2));
+            const badgeH = discountText ? 104 : 80;
+
+            let posX = W - badgeW - 60;
+            let posY = 60;
+
+            if (config.pricePosition === 'top-left') {
+                posX = 60;
+                posY = (config.hasBranding && config.badge) ? 130 : 60;
+            } else if (config.pricePosition === 'bottom-left') {
+                posX = 60;
+                posY = H - (config.hasSale && config.ctaText ? 200 : 130) - badgeH;
+            }
+
+            // Shadow
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+            ctx.shadowBlur = 18;
+            ctx.shadowOffsetY = 6;
+
+            // Background styling
+            let bgGrad = ctx.createLinearGradient(posX, posY, posX + badgeW, posY + badgeH);
+            let textColor = '#ffffff';
+            let oldTextColor = 'rgba(255, 255, 255, 0.7)';
+            let strikeColor = '#ffffff';
+
+            if (config.priceStyle === 'gold-luxury') {
+                bgGrad.addColorStop(0, '#F59E0B');
+                bgGrad.addColorStop(1, '#D97706');
+                textColor = '#18181B';
+                oldTextColor = 'rgba(24, 24, 27, 0.65)';
+                strikeColor = '#DC2626';
+            } else if (config.priceStyle === 'sleek-dark') {
+                bgGrad.addColorStop(0, 'rgba(24, 24, 27, 0.95)');
+                bgGrad.addColorStop(1, 'rgba(9, 9, 11, 0.95)');
+                textColor = '#FBBF24';
+                oldTextColor = 'rgba(255, 255, 255, 0.6)';
+                strikeColor = '#EF4444';
+            } else if (config.priceStyle === 'clean-white') {
+                bgGrad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+                bgGrad.addColorStop(1, 'rgba(248, 250, 252, 0.98)');
+                textColor = '#E60023';
+                oldTextColor = '#64748B';
+                strikeColor = '#DC2626';
+            } else { // modern-red
+                bgGrad.addColorStop(0, '#E60023');
+                bgGrad.addColorStop(1, '#B91C1C');
+                textColor = '#ffffff';
+                oldTextColor = 'rgba(255, 255, 255, 0.75)';
+                strikeColor = '#FEE2E2';
+            }
+
+            // Draw main badge card
+            ctx.fillStyle = bgGrad;
+            drawRoundedRect(ctx, posX, posY, badgeW, badgeH, 22);
+            ctx.fill();
+
+            // Subtle border
+            ctx.shadowColor = 'transparent';
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = config.priceStyle === 'clean-white' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.25)';
+            ctx.stroke();
+
+            // Content positions
+            let currentY = posY + (discountText ? 70 : badgeH / 2);
+
+            // If discount tag exists: draw small pill at top inside card
+            if (discountText) {
+                const discPadX = 12;
+                const discPillW = discountWidth + (discPadX * 2);
+                const discPillH = 24;
+                const discX = posX + padX;
+                const discY = posY + 14;
+
+                ctx.fillStyle = config.priceStyle === 'gold-luxury' ? '#18181B' : (config.priceStyle === 'clean-white' ? '#E60023' : '#FBBF24');
+                drawRoundedRect(ctx, discX, discY, discPillW, discPillH, 12);
+                ctx.fill();
+
+                ctx.fillStyle = config.priceStyle === 'gold-luxury' ? '#FBBF24' : '#ffffff';
+                ctx.font = "bold 15px 'Plus Jakarta Sans', sans-serif";
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(discountText, discX + discPillW / 2, discY + discPillH / 2 + 1);
+            }
+
+            // Draw Sale Price
+            ctx.font = "800 42px 'Plus Jakarta Sans', sans-serif";
+            ctx.fillStyle = textColor;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(saleText, posX + padX, currentY);
+
+            // Draw Old Strike-through Price
+            if (oldText) {
+                const saleRight = posX + padX + saleWidth + 12;
+                ctx.font = "600 24px 'Inter', sans-serif";
+                ctx.fillStyle = oldTextColor;
+                ctx.fillText(oldText, saleRight, currentY + 2);
+
+                // Strike line
+                ctx.strokeStyle = strikeColor;
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(saleRight - 2, currentY + 3);
+                ctx.lineTo(saleRight + oldWidth + 4, currentY + 1);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        function drawBrandingLayer(W, H) {
+            ctx.save();
+            // Draw Badge (Top Left Pill)
+            if (config.badge) {
+                const badgeText = config.badge.toUpperCase();
+                ctx.font = "bold 26px 'Plus Jakarta Sans', sans-serif";
+                const metrics = ctx.measureText(badgeText);
+                const padX = 24;
+                const padY = 14;
+                const pillW = metrics.width + (padX * 2);
+                const pillH = 50;
+                const pillX = 60;
+                const pillY = 60;
+
+                // Red Pill Background
+                ctx.fillStyle = '#E60023';
+                ctx.shadowColor = 'rgba(0,0,0,0.35)';
+                ctx.shadowBlur = 12;
+                ctx.shadowOffsetY = 4;
+                drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 25);
+                ctx.fill();
+
+                // White Badge Text
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(badgeText, pillX + pillW / 2, pillY + pillH / 2 + 1);
+            }
+
+            // Draw Website / Watermark (Bottom Center)
+            if (config.watermark) {
+                ctx.font = "600 24px 'Inter', sans-serif";
+                ctx.textAlign = 'center';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+                ctx.shadowColor = 'rgba(0,0,0,0.7)';
+                ctx.shadowBlur = 8;
+                ctx.shadowOffsetY = 2;
+                ctx.fillText(config.watermark.toLowerCase(), W / 2, H - 45);
+            }
+            ctx.restore();
+        }
+
+        function drawTextLayer(W, H) {
+            ctx.save();
+            const padding = 70;
+            const maxWidth = W - (padding * 2);
+
+            const headlineLines = config.headline ? wrapText(ctx, config.headline, maxWidth) : [];
+            const subLines = config.subheadline ? wrapText(ctx, config.subheadline, maxWidth) : [];
+            const totalTextH = (headlineLines.length * 74) + (subLines.length ? (subLines.length * 42) + 16 : 0);
+
+            // Compute Y position based on selection
+            let startY;
+            if (config.textPosition === 'bottom') {
+                let bottomMargin = 40;
+                if (config.hasBranding && config.watermark) bottomMargin += 55;
+                if (config.hasSale && config.ctaText) bottomMargin += 86;
+                startY = H - bottomMargin - totalTextH;
+            } else if (config.textPosition === 'top') {
+                startY = (config.hasBranding && config.badge) ? 160 : 110;
+            } else {
+                startY = (H - totalTextH) / 2;
+            }
+
+            // Draw Headline
+            if (config.headline && headlineLines.length) {
+                ctx.font = `800 64px ${config.font}`;
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+                ctx.shadowBlur = 18;
+                ctx.shadowOffsetY = 4;
+
+                headlineLines.forEach((line, i) => {
+                    ctx.fillText(line, W / 2, startY + (i * 74));
+                });
+
+                startY += (headlineLines.length * 74) + 16;
+            }
+
+            // Draw Sub-headline
+            if (config.subheadline && subLines.length) {
+                ctx.font = `600 32px 'Inter', sans-serif`;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+                ctx.shadowBlur = 12;
+                ctx.shadowOffsetY = 2;
+
+                subLines.forEach((line, i) => {
+                    ctx.fillText(line, W / 2, startY + (i * 42));
+                });
+            }
+
+            ctx.restore();
+        }
+
+        function drawCtaButton(W, H) {
+            if (!config.hasSale || !config.ctaText) return;
+
+            ctx.save();
+            const ctaText = config.ctaText.trim();
+            ctx.font = "800 30px 'Plus Jakarta Sans', sans-serif";
+            const textMetrics = ctx.measureText(ctaText);
+            const textW = textMetrics.width;
+
+            const btnH = 76;
+            const btnW = Math.max(340, Math.min(640, textW + 90));
+            const btnX = (W - btnW) / 2;
+            const btnY = (config.hasBranding && config.watermark) ? (H - 146) : (H - 96);
+
+            // Glow Shadow
+            ctx.shadowBlur = 24;
+            ctx.shadowOffsetY = 8;
+
+            let grad = ctx.createLinearGradient(btnX, btnY, btnX + btnW, btnY + btnH);
+            let textColor = '#ffffff';
+
+            if (config.ctaStyle === 'gold') {
+                ctx.shadowColor = 'rgba(245, 158, 11, 0.45)';
+                grad.addColorStop(0, '#F59E0B');
+                grad.addColorStop(1, '#D97706');
+                textColor = '#18181B';
+            } else if (config.ctaStyle === 'dark') {
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                grad.addColorStop(0, '#27272A');
+                grad.addColorStop(1, '#09090B');
+                textColor = '#ffffff';
+            } else if (config.ctaStyle === 'emerald') {
+                ctx.shadowColor = 'rgba(16, 185, 129, 0.45)';
+                grad.addColorStop(0, '#10B981');
+                grad.addColorStop(1, '#047857');
+                textColor = '#ffffff';
+            } else { // pinterest
+                ctx.shadowColor = 'rgba(230, 0, 35, 0.45)';
+                grad.addColorStop(0, '#E60023');
+                grad.addColorStop(1, '#AD081B');
+                textColor = '#ffffff';
+            }
+
+            // Draw Button Pill
+            ctx.fillStyle = grad;
+            drawRoundedRect(ctx, btnX, btnY, btnW, btnH, 38);
+            ctx.fill();
+
+            // Subtle 3D Top Inner Highlight
+            ctx.shadowColor = 'transparent';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+            ctx.lineWidth = 2;
+            drawRoundedRect(ctx, btnX + 2, btnY + 2, btnW - 4, btnH - 4, 36);
+            ctx.stroke();
+
+            // Draw Text Centered
+            ctx.font = "800 30px 'Plus Jakarta Sans', sans-serif";
+            ctx.fillStyle = textColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(ctaText, btnX + btnW / 2, btnY + btnH / 2 + 1);
+
+            ctx.restore();
+        }
+
+        // Helper: Word Wrap for Canvas
+        function wrapText(context, text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = context.measureText(currentLine + " " + word).width;
+                if (width < maxWidth) {
+                    currentLine += " " + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- 1-Click Fast Download ---
+        downloadBtn.addEventListener('click', function() {
+            if (!uploadedImg) return;
+            const dataURL = canvas.toDataURL('image/jpeg', 0.95);
+            const a = document.createElement('a');
+            a.href = dataURL;
+            a.download = `pinterest-pin-${Date.now()}.jpg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    </script>
+</body>
+</html>
