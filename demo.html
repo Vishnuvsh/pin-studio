@@ -183,7 +183,57 @@
                             </div>
                         </div>
 
-                        <!-- TOOL 2: Typography & Viral Text Hook (OPT-IN TOGGLE) -->
+                        
+                        <!-- TOOL 2: Product Price Tag & Sale Badge -->
+                        <div class="border border-red-200/90 rounded-2xl p-4 bg-gradient-to-br from-white to-red-50/20 shadow-sm transition hover:border-red-300">
+                            <div class="flex items-center justify-between">
+                                <label for="enableSaleToggle" class="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                    <span>🏷️</span> Price Tag & Sale Badge
+                                    <span class="bg-red-100 text-pinterest text-[9px] font-bold px-1.5 py-0.5 rounded-md">Sales Booster</span>
+                                </label>
+                                <input type="checkbox" id="enableSaleToggle" class="w-4 h-4 text-pinterest rounded border-gray-300 focus:ring-red-400 cursor-pointer">
+                            </div>
+
+                            <!-- Collapsible Content -->
+                            <div id="saleControls" class="hidden mt-4 pt-3 border-t border-gray-100 space-y-3.5">
+                                <div class="grid grid-cols-3 gap-2.5">
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-700 block mb-1">Sale Price</label>
+                                        <input type="text" id="salePriceInput" placeholder="e.g. ₹499" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 font-bold text-gray-900 bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-500 block mb-1">Old Price <span class="font-normal">(Crossed)</span></label>
+                                        <input type="text" id="oldPriceInput" placeholder="e.g. ₹999" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 text-gray-400 line-through bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Discount Tag</label>
+                                        <input type="text" id="discountTagInput" placeholder="e.g. 50% OFF" class="w-full text-xs px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 uppercase text-red-600 font-semibold bg-white">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Price Badge Style</label>
+                                        <select id="priceBadgeStyleSelect" class="w-full text-xs px-2.5 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                            <option value="modern-red">Pinterest Red Tag</option>
+                                            <option value="gold-luxury">Golden Luxury Tag</option>
+                                            <option value="sleek-dark">Dark Minimal Tag</option>
+                                            <option value="clean-white">Clean White Card</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-[11px] font-semibold text-gray-600 block mb-1">Price Tag Position</label>
+                                        <select id="priceBadgePosSelect" class="w-full text-xs px-2.5 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 bg-white">
+                                            <option value="top-right">Top Right</option>
+                                            <option value="top-left">Top Left</option>
+                                            <option value="bottom-left">Bottom Left</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+<!-- TOOL 2: Typography & Viral Text Hook (OPT-IN TOGGLE) -->
                         <div class="border border-gray-200/80 rounded-2xl p-4 bg-white transition">
                             <div class="flex items-center justify-between">
                                 <label for="enableTextToggle" class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
@@ -301,6 +351,16 @@
         const modeBlurBtn = document.getElementById('modeBlur');
         const ratioBtns = document.querySelectorAll('.ratio-btn');
 
+        
+        // Price Controls
+        const enableSaleToggle = document.getElementById('enableSaleToggle');
+        const saleControls = document.getElementById('saleControls');
+        const salePriceInput = document.getElementById('salePriceInput');
+        const oldPriceInput = document.getElementById('oldPriceInput');
+        const discountTagInput = document.getElementById('discountTagInput');
+        const priceBadgeStyleSelect = document.getElementById('priceBadgeStyleSelect');
+        const priceBadgePosSelect = document.getElementById('priceBadgePosSelect');
+
         // Text & Branding Controls
         const enableTextToggle = document.getElementById('enableTextToggle');
         const textControls = document.getElementById('textControls');
@@ -340,6 +400,14 @@
             hasScrim: true,
             // Branding Layer
             hasBranding: false,
+            // Price Layer
+            hasSale: false,
+            salePrice: '',
+            oldPrice: '',
+            discountTag: '',
+            priceStyle: 'modern-red',
+            pricePosition: 'top-right',
+
             badge: '',
             watermark: ''
         };
@@ -464,6 +532,19 @@
             });
         });
 
+        
+        // Price Tag Listeners
+        enableSaleToggle.addEventListener('change', (e) => {
+            config.hasSale = e.target.checked;
+            saleControls.classList.toggle('hidden', !config.hasSale);
+            render();
+        });
+        salePriceInput.addEventListener('input', (e) => { config.salePrice = e.target.value.trim(); render(); });
+        oldPriceInput.addEventListener('input', (e) => { config.oldPrice = e.target.value.trim(); render(); });
+        discountTagInput.addEventListener('input', (e) => { config.discountTag = e.target.value.trim(); render(); });
+        priceBadgeStyleSelect.addEventListener('change', (e) => { config.priceStyle = e.target.value; render(); });
+        priceBadgePosSelect.addEventListener('change', (e) => { config.pricePosition = e.target.value; render(); });
+
         // --- Optional Text Layer Toggle ---
         enableTextToggle.addEventListener('change', (e) => {
             config.hasText = e.target.checked;
@@ -489,6 +570,16 @@
 
         // --- Reset All Button ---
         resetAllBtn.addEventListener('click', () => {
+            
+            enableSaleToggle.checked = false;
+            config.hasSale = false;
+            saleControls.classList.add('hidden');
+            salePriceInput.value = '';
+            oldPriceInput.value = '';
+            discountTagInput.value = '';
+            config.salePrice = '';
+            config.oldPrice = '';
+            config.discountTag = '';
             enableTextToggle.checked = false;
             config.hasText = false;
             textControls.classList.add('hidden');
@@ -581,6 +672,11 @@
                 drawGradientScrim(W, H);
             }
 
+            // 2.5 Price Badge Layer
+            if (config.hasSale && config.salePrice) {
+                drawPriceBadge(W, H);
+            }
+
             // 3. Optional Branding / Badge Layer
             if (config.hasBranding) {
                 drawBrandingLayer(W, H);
@@ -590,6 +686,148 @@
             if (config.hasText && (config.headline || config.subheadline)) {
                 drawTextLayer(W, H);
             }
+        }
+
+        
+        // Helper: Safe Rounded Rect
+        function drawRoundedRect(context, x, y, width, height, radius) {
+            if (context.roundRect) {
+                context.beginPath();
+                context.roundRect(x, y, width, height, radius);
+                return;
+            }
+            context.beginPath();
+            context.moveTo(x + radius, y);
+            context.lineTo(x + width - radius, y);
+            context.quadraticCurveTo(x + width, y, x + width, y + radius);
+            context.lineTo(x + width, y + height - radius);
+            context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            context.lineTo(x + radius, y + height);
+            context.quadraticCurveTo(x, y + height, x, y + height - radius);
+            context.lineTo(x, y + radius);
+            context.quadraticCurveTo(x, y, x + radius, y);
+            context.closePath();
+        }
+
+        function drawPriceBadge(W, H) {
+            if (!config.hasSale || !config.salePrice) return;
+
+            ctx.save();
+            const saleText = config.salePrice.trim();
+            const oldText = config.oldPrice ? config.oldPrice.trim() : '';
+            const discountText = config.discountTag ? config.discountTag.trim().toUpperCase() : '';
+
+            ctx.font = "800 42px 'Plus Jakarta Sans', sans-serif";
+            const saleWidth = ctx.measureText(saleText).width;
+
+            ctx.font = "600 24px 'Inter', sans-serif";
+            const oldWidth = oldText ? ctx.measureText(oldText).width : 0;
+
+            ctx.font = "bold 16px 'Plus Jakarta Sans', sans-serif";
+            const discountWidth = discountText ? ctx.measureText(discountText).width : 0;
+
+            const padX = 26;
+            const padY = 18;
+            const contentW = Math.max(saleWidth + (oldWidth ? oldWidth + 14 : 0), discountWidth + 16);
+            const badgeW = Math.max(210, contentW + (padX * 2));
+            const badgeH = discountText ? 104 : 80;
+
+            let posX = W - badgeW - 60;
+            let posY = 60;
+
+            if (config.pricePosition === 'top-left') {
+                posX = 60;
+                posY = (config.hasBranding && config.badge) ? 130 : 60;
+            } else if (config.pricePosition === 'bottom-left') {
+                posX = 60;
+                posY = H - 140 - badgeH;
+            }
+
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+            ctx.shadowBlur = 18;
+            ctx.shadowOffsetY = 6;
+
+            let bgGrad = ctx.createLinearGradient(posX, posY, posX + badgeW, posY + badgeH);
+            let textColor = '#ffffff';
+            let oldTextColor = 'rgba(255, 255, 255, 0.7)';
+            let strikeColor = '#ffffff';
+
+            if (config.priceStyle === 'gold-luxury') {
+                bgGrad.addColorStop(0, '#F59E0B');
+                bgGrad.addColorStop(1, '#D97706');
+                textColor = '#18181B';
+                oldTextColor = 'rgba(24, 24, 27, 0.65)';
+                strikeColor = '#DC2626';
+            } else if (config.priceStyle === 'sleek-dark') {
+                bgGrad.addColorStop(0, 'rgba(24, 24, 27, 0.95)');
+                bgGrad.addColorStop(1, 'rgba(9, 9, 11, 0.95)');
+                textColor = '#FBBF24';
+                oldTextColor = 'rgba(255, 255, 255, 0.6)';
+                strikeColor = '#EF4444';
+            } else if (config.priceStyle === 'clean-white') {
+                bgGrad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+                bgGrad.addColorStop(1, 'rgba(248, 250, 252, 0.98)');
+                textColor = '#E60023';
+                oldTextColor = '#64748B';
+                strikeColor = '#DC2626';
+            } else {
+                bgGrad.addColorStop(0, '#E60023');
+                bgGrad.addColorStop(1, '#B91C1C');
+                textColor = '#ffffff';
+                oldTextColor = 'rgba(255, 255, 255, 0.75)';
+                strikeColor = '#FEE2E2';
+            }
+
+            ctx.fillStyle = bgGrad;
+            drawRoundedRect(ctx, posX, posY, badgeW, badgeH, 22);
+            ctx.fill();
+
+            ctx.shadowColor = 'transparent';
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = config.priceStyle === 'clean-white' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.25)';
+            ctx.stroke();
+
+            let currentY = posY + (discountText ? 70 : badgeH / 2);
+
+            if (discountText) {
+                const discPadX = 12;
+                const discPillW = discountWidth + (discPadX * 2);
+                const discPillH = 24;
+                const discX = posX + padX;
+                const discY = posY + 14;
+
+                ctx.fillStyle = config.priceStyle === 'gold-luxury' ? '#18181B' : (config.priceStyle === 'clean-white' ? '#E60023' : '#FBBF24');
+                drawRoundedRect(ctx, discX, discY, discPillW, discPillH, 12);
+                ctx.fill();
+
+                ctx.fillStyle = config.priceStyle === 'gold-luxury' ? '#FBBF24' : '#ffffff';
+                ctx.font = "bold 15px 'Plus Jakarta Sans', sans-serif";
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(discountText, discX + discPillW / 2, discY + discPillH / 2 + 1);
+            }
+
+            ctx.font = "800 42px 'Plus Jakarta Sans', sans-serif";
+            ctx.fillStyle = textColor;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(saleText, posX + padX, currentY);
+
+            if (oldText) {
+                const saleRight = posX + padX + saleWidth + 12;
+                ctx.font = "600 24px 'Inter', sans-serif";
+                ctx.fillStyle = oldTextColor;
+                ctx.fillText(oldText, saleRight, currentY + 2);
+
+                ctx.strokeStyle = strikeColor;
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(saleRight - 2, currentY + 3);
+                ctx.lineTo(saleRight + oldWidth + 4, currentY + 1);
+                ctx.stroke();
+            }
+
+            ctx.restore();
         }
 
         function getFilterString(filter) {
