@@ -66,16 +66,16 @@
         <!-- STEP 1: Upload Dropzone (Visible when no image or user wants to re-upload) -->
         <section id="uploadSection" class="p-8 sm:p-12 text-center">
             <div class="relative border-2 border-dashed border-gray-300 hover:border-red-400 rounded-3xl p-8 sm:p-14 bg-gray-50/60 hover:bg-red-50/30 transition duration-200 cursor-pointer group flex flex-col items-center justify-center max-w-xl mx-auto">
-                <input type="file" id="imageInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+                <input type="file" id="imageInput" accept="image/*" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
                 <div class="w-16 h-16 mb-4 rounded-2xl bg-white shadow-sm flex items-center justify-center text-gray-400 group-hover:text-pinterest group-hover:scale-110 transition-all">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                     </svg>
                 </div>
                 <h3 class="text-lg font-semibold text-gray-700 group-hover:text-gray-900 mb-1">
-                    Choose an image or drag & drop
+                    Choose 1 to 3 images or drag & drop
                 </h3>
-                <p class="text-xs text-gray-400">JPG, PNG, WebP up to 25MB • Auto-sizes to 2:3 ratio</p>
+                <p class="text-xs text-gray-400">JPG, PNG, WebP • Upload 1 for full pin, or 2–3 for instant viral Pinterest collage!</p>
             </div>
         </section>
 
@@ -84,16 +84,20 @@
             
             <!-- LEFT PANEL: Pin Preview & Fast 1-Click Download -->
             <div class="lg:col-span-5 p-6 sm:p-8 bg-gray-50/50 flex flex-col items-center justify-between">
-                <div class="w-full flex items-center justify-between mb-4">
+                <div class="w-full flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
                         <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
                         <span class="text-xs font-semibold text-gray-600 tracking-wide uppercase">Pin Preview</span>
+                        <span id="activeSlotBadge" class="hidden text-[10px] font-bold bg-red-100 text-pinterest px-2.5 py-0.5 rounded-full">Editing: Frame 1</span>
                     </div>
                     <label for="imageInputSecondary" class="text-xs text-pinterest font-medium hover:underline cursor-pointer flex items-center gap-1">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                        Change Photo
+                        Replace All
                     </label>
-                    <input type="file" id="imageInputSecondary" accept="image/*" class="hidden">
+                    <input type="file" id="imageInputSecondary" accept="image/*" multiple class="hidden">
+                    <input type="file" id="slotInput0" accept="image/*" class="hidden">
+                    <input type="file" id="slotInput1" accept="image/*" class="hidden">
+                    <input type="file" id="slotInput2" accept="image/*" class="hidden">
                 </div>
 
                 <!-- Live Canvas Display -->
@@ -164,6 +168,68 @@
                                 </button>
                             </div>
 
+                            <!-- Multi-Image Pin Collage Selector -->
+                            <div class="pt-3 border-t border-gray-100 mb-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                                        <span>🖼️</span> Pin Collage Layout
+                                        <span class="bg-red-100 text-pinterest text-[9px] font-bold px-1.5 py-0.5 rounded-md">Viral Format</span>
+                                    </label>
+                                </div>
+                                <div class="grid grid-cols-4 gap-2 mb-3">
+                                    <button type="button" data-layout="single" class="layout-btn border-2 border-pinterest bg-red-50/50 text-pinterest font-semibold text-xs py-2 rounded-xl text-center flex flex-col items-center gap-1 transition">
+                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                                        <span class="text-[10px]">1 Photo</span>
+                                    </button>
+                                    <button type="button" data-layout="grid-3" class="layout-btn border border-gray-200 text-gray-600 hover:border-gray-300 font-semibold text-xs py-2 rounded-xl text-center flex flex-col items-center gap-1 transition">
+                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="9" rx="1"/><rect x="3" y="14" width="8.5" height="7" rx="1"/><rect x="12.5" y="14" width="8.5" height="7" rx="1"/></svg>
+                                        <span class="text-[10px]">3-Grid</span>
+                                    </button>
+                                    <button type="button" data-layout="split-2" class="layout-btn border border-gray-200 text-gray-600 hover:border-gray-300 font-semibold text-xs py-2 rounded-xl text-center flex flex-col items-center gap-1 transition">
+                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="8" rx="1"/><rect x="3" y="13" width="18" height="8" rx="1"/></svg>
+                                        <span class="text-[10px]">2-Split</span>
+                                    </button>
+                                    <button type="button" data-layout="split-vertical" class="layout-btn border border-gray-200 text-gray-600 hover:border-gray-300 font-semibold text-xs py-2 rounded-xl text-center flex flex-col items-center gap-1 transition">
+                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="18" rx="1"/><rect x="13" y="3" width="8" height="18" rx="1"/></svg>
+                                        <span class="text-[10px]">Side/Side</span>
+                                    </button>
+                                </div>
+
+                                <!-- Collage Slot Controller (Shown in collage mode) -->
+                                <div id="collageSlotsContainer" class="hidden p-3 bg-gray-50/80 rounded-xl space-y-2.5 border border-gray-200/80">
+                                    <div class="flex items-center justify-between text-[11px] font-semibold text-gray-700">
+                                        <span>Select frame to edit or upload:</span>
+                                        <span class="text-[10px] text-gray-400 font-normal">Click frame on canvas to pan</span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-1.5" id="slotButtonGrid">
+                                        <button type="button" id="slotBtn0" class="slot-select-btn border-2 border-pinterest bg-white text-pinterest font-bold text-[11px] py-1.5 px-2 rounded-lg text-center flex items-center justify-center gap-1 transition shadow-xs">
+                                            <span>📷 Frame 1</span>
+                                        </button>
+                                        <button type="button" id="slotBtn1" class="slot-select-btn border border-gray-200 bg-white text-gray-600 font-medium text-[11px] py-1.5 px-2 rounded-lg text-center flex items-center justify-center gap-1 transition shadow-xs">
+                                            <span>📷 Frame 2</span>
+                                        </button>
+                                        <button type="button" id="slotBtn2" class="slot-select-btn border border-gray-200 bg-white text-gray-600 font-medium text-[11px] py-1.5 px-2 rounded-lg text-center flex items-center justify-center gap-1 transition shadow-xs">
+                                            <span>📷 Frame 3</span>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-1 text-[11px]">
+                                        <button type="button" id="uploadActiveSlotBtn" class="text-pinterest hover:underline font-bold flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                            <span id="uploadActiveSlotText">Upload Photo for Frame 1</span>
+                                        </button>
+                                        <div class="flex items-center gap-1 text-gray-500 font-medium">
+                                            <span>Divider:</span>
+                                            <select id="dividerWidthSelect" class="bg-white border border-gray-200 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-gray-700">
+                                                <option value="8">8px White</option>
+                                                <option value="4">4px Thin</option>
+                                                <option value="12">12px Bold</option>
+                                                <option value="0">No Gap</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Fit Style (Cover vs Blur Background) -->
                             <div class="space-y-3 pt-3 border-t border-gray-100">
                                 <div class="flex items-center justify-between">
@@ -176,7 +242,7 @@
 
                                 <!-- Zoom & Reset Pan -->
                                 <div class="flex items-center gap-3">
-                                    <span class="text-xs font-medium text-gray-500 whitespace-nowrap">Zoom</span>
+                                    <span class="text-xs font-medium text-gray-500 whitespace-nowrap" id="zoomLabel">Zoom Frame</span>
                                     <input type="range" id="zoomSlider" min="1" max="2.5" step="0.05" value="1" class="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600">
                                     <button id="resetPanBtn" title="Center Image" class="text-xs text-gray-400 hover:text-gray-700 px-2 py-1 bg-gray-100 rounded-md">Center</button>
                                 </div>
@@ -255,6 +321,25 @@
                                         <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">GRAB 50% OFF ⚡</button>
                                         <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">LINK IN BIO 🔗</button>
                                         <button type="button" class="quick-cta text-[10px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full transition">TAP TO ORDER</button>
+                                    </div>
+                                </div>
+                                <!-- Social Proof & Star Rating Badge -->
+                                <div class="pt-3 border-t border-gray-100 space-y-2.5">
+                                    <div class="flex items-center justify-between">
+                                        <label for="enableRatingToggle" class="text-[11px] font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                                            <span>⭐</span> Star Rating & Trust Badge
+                                        </label>
+                                        <input type="checkbox" id="enableRatingToggle" class="w-4 h-4 text-pinterest rounded border-gray-300 focus:ring-red-400 cursor-pointer">
+                                    </div>
+                                    <div id="ratingControls" class="hidden grid grid-cols-2 gap-2.5 pt-1">
+                                        <div>
+                                            <label class="text-[10px] font-semibold text-gray-600 block mb-1">Rating & Reviews</label>
+                                            <input type="text" id="ratingTextInput" value="4.9 ★ (1.2k+ sold)" placeholder="e.g. 4.9 ★ (1.2k+ reviews)" class="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-xl bg-white focus:outline-none focus:border-red-400 font-semibold text-gray-800">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-semibold text-gray-600 block mb-1">Trust Guarantee</label>
+                                            <input type="text" id="trustTextInput" value="✓ Free Cash on Delivery" placeholder="e.g. ✓ Free Delivery" class="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-xl bg-white focus:outline-none focus:border-red-400 font-semibold text-emerald-700">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -430,9 +515,27 @@
         const ctx = canvas.getContext('2d');
         const downloadBtn = document.getElementById('downloadBtn');
         const aspectRatioLabel = document.getElementById('aspectRatioLabel');
+        const activeSlotBadge = document.getElementById('activeSlotBadge');
+
+        // Collage & Slot Controls
+        const layoutBtns = document.querySelectorAll('.layout-btn');
+        const collageSlotsContainer = document.getElementById('collageSlotsContainer');
+        const slotBtn0 = document.getElementById('slotBtn0');
+        const slotBtn1 = document.getElementById('slotBtn1');
+        const slotBtn2 = document.getElementById('slotBtn2');
+        const slotBtns = [slotBtn0, slotBtn1, slotBtn2];
+        const uploadActiveSlotBtn = document.getElementById('uploadActiveSlotBtn');
+        const uploadActiveSlotText = document.getElementById('uploadActiveSlotText');
+        const dividerWidthSelect = document.getElementById('dividerWidthSelect');
+        const slotInputs = [
+            document.getElementById('slotInput0'),
+            document.getElementById('slotInput1'),
+            document.getElementById('slotInput2')
+        ];
 
         // Framing & Zoom Controls
         const zoomSlider = document.getElementById('zoomSlider');
+        const zoomLabel = document.getElementById('zoomLabel');
         const resetPanBtn = document.getElementById('resetPanBtn');
         const modeCoverBtn = document.getElementById('modeCover');
         const modeBlurBtn = document.getElementById('modeBlur');
@@ -449,6 +552,12 @@
         const ctaTextInput = document.getElementById('ctaTextInput');
         const ctaStyleSelect = document.getElementById('ctaStyleSelect');
         const quickCtaBtns = document.querySelectorAll('.quick-cta');
+
+        // Social Proof & Rating Controls
+        const enableRatingToggle = document.getElementById('enableRatingToggle');
+        const ratingControls = document.getElementById('ratingControls');
+        const ratingTextInput = document.getElementById('ratingTextInput');
+        const trustTextInput = document.getElementById('trustTextInput');
 
         // Smart Copy Assistant Controls
         const enableAiCopyToggle = document.getElementById('enableAiCopyToggle');
@@ -481,15 +590,21 @@
         const resetAllBtn = document.getElementById('resetAllBtn');
 
         // State Machine
-        let uploadedImg = null;
+        let slots = [
+            { img: null, zoom: 1.0, panX: 0, panY: 0 },
+            { img: null, zoom: 1.0, panX: 0, panY: 0 },
+            { img: null, zoom: 1.0, panX: 0, panY: 0 }
+        ];
+        let activeSlot = 0;
+
         let config = {
             width: 1000,
             height: 1500,
             ratioLabel: '2:3 (1000 × 1500px)',
+            layout: 'single', // 'single', 'grid-3', 'split-2', 'split-vertical'
+            dividerWidth: 8,
+            dividerColor: '#ffffff',
             fitMode: 'cover', // 'cover' or 'blur'
-            zoom: 1.0,
-            panX: 0,
-            panY: 0,
             filter: 'none',
             // Text Layer
             hasText: false,
@@ -510,7 +625,11 @@
             priceStyle: 'modern-red',
             pricePosition: 'top-right',
             ctaText: 'SHOP NOW ➔',
-            ctaStyle: 'pinterest'
+            ctaStyle: 'pinterest',
+            // Social Proof & Ratings
+            hasRating: false,
+            ratingText: '4.9 ★ (1.2k+ sold)',
+            trustText: '✓ Free Cash on Delivery'
         };
 
         // Initialize Canvas Size
@@ -520,40 +639,175 @@
         // --- File Upload Listeners ---
         [imageInput, imageInputSecondary].forEach(input => {
             input.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) handleImageFile(file);
+                if (e.target.files && e.target.files.length) {
+                    handleImageFiles(e.target.files);
+                }
             });
+        });
+
+        // Individual slot file inputs
+        slotInputs.forEach((input, index) => {
+            if (input) {
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const img = new Image();
+                        img.onload = function() {
+                            slots[index].img = img;
+                            slots[index].panX = 0;
+                            slots[index].panY = 0;
+                            slots[index].zoom = 1.0;
+                            setActiveSlot(index);
+                            render();
+                        };
+                        img.src = evt.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+
+        uploadActiveSlotBtn.addEventListener('click', () => {
+            if (slotInputs[activeSlot]) {
+                slotInputs[activeSlot].click();
+            }
         });
 
         // Drag & Drop onto Upload Section
         uploadSection.addEventListener('dragover', (e) => { e.preventDefault(); });
         uploadSection.addEventListener('drop', (e) => {
             e.preventDefault();
-            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                handleImageFile(e.dataTransfer.files[0]);
+            if (e.dataTransfer.files && e.dataTransfer.files.length) {
+                handleImageFiles(e.dataTransfer.files);
             }
         });
 
-        function handleImageFile(file) {
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const img = new Image();
-                img.onload = function() {
-                    uploadedImg = img;
-                    // Reset pan offsets for fresh image
-                    config.panX = 0;
-                    config.panY = 0;
-                    config.zoom = 1.0;
-                    zoomSlider.value = 1.0;
+        function handleImageFiles(files) {
+            const fileList = Array.from(files).slice(0, 3);
+            let loadedCount = 0;
 
-                    uploadSection.classList.add('hidden');
-                    studioSection.classList.remove('hidden');
-                    render();
+            fileList.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const img = new Image();
+                    img.onload = function() {
+                        slots[index].img = img;
+                        slots[index].panX = 0;
+                        slots[index].panY = 0;
+                        slots[index].zoom = 1.0;
+                        loadedCount++;
+
+                        if (loadedCount === fileList.length) {
+                            if (fileList.length === 2) {
+                                setLayout('split-2');
+                            } else if (fileList.length >= 3) {
+                                setLayout('grid-3');
+                            } else {
+                                setLayout('single');
+                            }
+                            setActiveSlot(0);
+                            uploadSection.classList.add('hidden');
+                            studioSection.classList.remove('hidden');
+                            render();
+                        }
+                    };
+                    img.src = evt.target.result;
                 };
-                img.src = evt.target.result;
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            });
         }
+
+        function setLayout(layoutName) {
+            config.layout = layoutName;
+            layoutBtns.forEach(btn => {
+                const isSelected = btn.dataset.layout === layoutName;
+                btn.classList.toggle('border-pinterest', isSelected);
+                btn.classList.toggle('bg-red-50/50', isSelected);
+                btn.classList.toggle('text-pinterest', isSelected);
+                btn.classList.toggle('border-gray-200', !isSelected);
+                btn.classList.toggle('text-gray-600', !isSelected);
+            });
+            collageSlotsContainer.classList.toggle('hidden', layoutName === 'single');
+            updateSlotManagerUI();
+        }
+
+        function getFrameLabel(index) {
+            if (config.layout === 'split-2') return index === 0 ? 'Top Hero' : 'Bottom Detail';
+            if (config.layout === 'grid-3') {
+                if (index === 0) return 'Top Hero';
+                if (index === 1) return 'Bottom Left';
+                return 'Bottom Right';
+            }
+            if (config.layout === 'split-vertical') return index === 0 ? 'Left Side' : 'Right Side';
+            return 'Main Photo';
+        }
+
+        function setActiveSlot(index) {
+            activeSlot = index;
+            updateSlotManagerUI();
+            if (slots[activeSlot]) {
+                zoomSlider.value = slots[activeSlot].zoom;
+            }
+            render();
+        }
+
+        function updateSlotManagerUI() {
+            slotBtns.forEach((btn, idx) => {
+                if (!btn) return;
+                const is2Slot = config.layout === 'split-2' || config.layout === 'split-vertical';
+                if (idx === 2 && is2Slot) {
+                    btn.classList.add('hidden');
+                } else {
+                    btn.classList.remove('hidden');
+                }
+
+                const isActive = idx === activeSlot;
+                btn.classList.toggle('border-2', isActive);
+                btn.classList.toggle('border-pinterest', isActive);
+                btn.classList.toggle('text-pinterest', isActive);
+                btn.classList.toggle('border-gray-200', !isActive);
+                btn.classList.toggle('text-gray-600', !isActive);
+
+                const hasImg = slots[idx] && slots[idx].img;
+                btn.innerHTML = hasImg 
+                    ? `<span>✓ Frame ${idx + 1}</span>` 
+                    : `<span>+ Frame ${idx + 1}</span>`;
+            });
+
+            if (config.layout !== 'single') {
+                activeSlotBadge.classList.remove('hidden');
+                activeSlotBadge.textContent = 'Editing: ' + getFrameLabel(activeSlot);
+                uploadActiveSlotText.textContent = (slots[activeSlot] && slots[activeSlot].img ? 'Change Photo: ' : 'Upload Photo: ') + getFrameLabel(activeSlot);
+                zoomLabel.textContent = 'Zoom ' + getFrameLabel(activeSlot);
+            } else {
+                activeSlotBadge.classList.add('hidden');
+                zoomLabel.textContent = 'Zoom';
+            }
+        }
+
+        // Slot Button Clicks
+        slotBtns.forEach((btn, idx) => {
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    setActiveSlot(idx);
+                });
+            }
+        });
+
+        // Layout Buttons
+        layoutBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLayout(btn.dataset.layout);
+                render();
+            });
+        });
+
+        dividerWidthSelect.addEventListener('change', (e) => {
+            config.dividerWidth = parseInt(e.target.value, 10);
+            render();
+        });
 
         // --- Aspect Ratio Buttons ---
         ratioBtns.forEach(btn => {
@@ -607,14 +861,19 @@
 
         // --- Zoom & Pan Slider ---
         zoomSlider.addEventListener('input', (e) => {
-            config.zoom = parseFloat(e.target.value);
+            const z = parseFloat(e.target.value);
+            if (slots[activeSlot]) {
+                slots[activeSlot].zoom = z;
+            }
             render();
         });
 
         resetPanBtn.addEventListener('click', () => {
-            config.panX = 0;
-            config.panY = 0;
-            config.zoom = 1.0;
+            if (slots[activeSlot]) {
+                slots[activeSlot].panX = 0;
+                slots[activeSlot].panY = 0;
+                slots[activeSlot].zoom = 1.0;
+            }
             zoomSlider.value = 1.0;
             render();
         });
@@ -682,6 +941,22 @@
                 config.ctaText = text;
                 render();
             });
+        });
+
+        
+        // --- Social Proof & Rating Listeners ---
+        enableRatingToggle.addEventListener('change', (e) => {
+            config.hasRating = e.target.checked;
+            ratingControls.classList.toggle('hidden', !config.hasRating);
+            render();
+        });
+        ratingTextInput.addEventListener('input', (e) => {
+            config.ratingText = e.target.value;
+            render();
+        });
+        trustTextInput.addEventListener('input', (e) => {
+            config.trustText = e.target.value;
+            render();
         });
 
         // --- Smart Description Converter & Copy Generator ---
@@ -976,7 +1251,7 @@
             badgeInput.value = '';
             watermarkInput.value = '';
 
-            // Reset Sale & CTA
+            // Reset Sale, Ratings & CTA
             enableSaleToggle.checked = false;
             config.hasSale = false;
             saleControls.classList.add('hidden');
@@ -994,6 +1269,19 @@
             priceBadgeStyleSelect.value = 'modern-red';
             priceBadgePosSelect.value = 'top-right';
             ctaStyleSelect.value = 'pinterest';
+
+            enableRatingToggle.checked = false;
+            config.hasRating = false;
+            ratingControls.classList.add('hidden');
+
+            // Reset Collage
+            setLayout('single');
+            slots.forEach(slot => {
+                slot.panX = 0;
+                slot.panY = 0;
+                slot.zoom = 1.0;
+            });
+            activeSlot = 0;
 
             // Reset AI Copy
             enableAiCopyToggle.checked = false;
@@ -1020,20 +1308,46 @@
         let isDragging = false;
         let startX, startY;
 
+        function getSlotAtCanvasPos(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = config.width / rect.width;
+            const scaleY = config.height / rect.height;
+            const px = (clientX - rect.left) * scaleX;
+            const py = (clientY - rect.top) * scaleY;
+            const frames = getLayoutFrames(config.width, config.height, config.layout);
+            for (let i = 0; i < frames.length; i++) {
+                const f = frames[i];
+                if (px >= f.x && px <= f.x + f.w && py >= f.y && py <= f.y + f.h) {
+                    return f.id;
+                }
+            }
+            return 0;
+        }
+
         canvas.addEventListener('mousedown', (e) => {
             isDragging = true;
             startX = e.clientX;
             startY = e.clientY;
+
+            const clickedSlot = getSlotAtCanvasPos(e.clientX, e.clientY);
+            setActiveSlot(clickedSlot);
+
+            // If clicked frame is empty, trigger file picker for it!
+            if (!slots[clickedSlot] || !slots[clickedSlot].img) {
+                if (slotInputs[clickedSlot]) {
+                    slotInputs[clickedSlot].click();
+                }
+            }
         });
 
         window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
+            if (!isDragging || !slots[activeSlot] || !slots[activeSlot].img) return;
             const deltaX = (e.clientX - startX) * (config.width / canvas.clientWidth);
             const deltaY = (e.clientY - startY) * (config.height / canvas.clientHeight);
             startX = e.clientX;
             startY = e.clientY;
-            config.panX += deltaX;
-            config.panY += deltaY;
+            slots[activeSlot].panX += deltaX;
+            slots[activeSlot].panY += deltaY;
             render();
         });
 
@@ -1045,16 +1359,21 @@
                 isDragging = true;
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
+                const clickedSlot = getSlotAtCanvasPos(startX, startY);
+                setActiveSlot(clickedSlot);
+                if (!slots[clickedSlot] || !slots[clickedSlot].img) {
+                    if (slotInputs[clickedSlot]) slotInputs[clickedSlot].click();
+                }
             }
         });
         window.addEventListener('touchmove', (e) => {
-            if (!isDragging || e.touches.length !== 1) return;
+            if (!isDragging || e.touches.length !== 1 || !slots[activeSlot] || !slots[activeSlot].img) return;
             const deltaX = (e.touches[0].clientX - startX) * (config.width / canvas.clientWidth);
             const deltaY = (e.touches[0].clientY - startY) * (config.height / canvas.clientHeight);
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
-            config.panX += deltaX;
-            config.panY += deltaY;
+            slots[activeSlot].panX += deltaX;
+            slots[activeSlot].panY += deltaY;
             render();
         });
         window.addEventListener('touchend', () => { isDragging = false; });
@@ -1064,7 +1383,9 @@
         // MAIN CANVAS RENDER PIPELINE
         // ==========================================
         function render() {
-            if (!uploadedImg) return;
+            // Check if at least one slot has an image
+            const hasAnyImage = slots.some(s => s && s.img);
+            if (!hasAnyImage) return;
 
             const W = config.width;
             const H = config.height;
@@ -1074,7 +1395,7 @@
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, W, H);
 
-            // 1. Draw Image Layer (Fit or Cover)
+            // 1. Draw Multi-Image Collage / Single Layer
             drawImageLayer(W, H);
 
             // 2. Scrim (Gradient for text and/or bottom CTA readability)
@@ -1087,17 +1408,22 @@
                 drawPriceBadge(W, H);
             }
 
-            // 4. Branding / Badge Layer
+            // 4. Social Proof & Star Rating Badge
+            if (config.hasRating) {
+                drawRatingBadge(W, H);
+            }
+
+            // 5. Branding / Badge Layer
             if (config.hasBranding) {
                 drawBrandingLayer(W, H);
             }
 
-            // 5. Text Overlay Layer
+            // 6. Text Overlay Layer
             if (config.hasText && (config.headline || config.subheadline)) {
                 drawTextLayer(W, H);
             }
 
-            // 6. Shop CTA Button Layer
+            // 7. Shop CTA Button Layer
             if (config.hasSale && config.ctaText) {
                 drawCtaButton(W, H);
             }
@@ -1133,54 +1459,157 @@
             }
         }
 
-        function drawImageLayer(W, H) {
-            const imgAspect = uploadedImg.width / uploadedImg.height;
-            const canvasAspect = W / H;
+        function getLayoutFrames(W, H, layout) {
+            const gap = (layout === 'single') ? 0 : config.dividerWidth;
+            if (layout === 'split-2') {
+                const topH = Math.round(H * 0.56);
+                const botH = H - topH - gap;
+                return [
+                    { id: 0, label: 'Top Hero', x: 0, y: 0, w: W, h: topH },
+                    { id: 1, label: 'Bottom Detail', x: 0, y: topH + gap, w: W, h: botH }
+                ];
+            }
+            if (layout === 'grid-3') {
+                const topH = Math.round(H * 0.58);
+                const botH = H - topH - gap;
+                const halfW = Math.round((W - gap) / 2);
+                return [
+                    { id: 0, label: 'Top Hero', x: 0, y: 0, w: W, h: topH },
+                    { id: 1, label: 'Bottom Left', x: 0, y: topH + gap, w: halfW, h: botH },
+                    { id: 2, label: 'Bottom Right', x: halfW + gap, y: topH + gap, w: W - halfW - gap, h: botH }
+                ];
+            }
+            if (layout === 'split-vertical') {
+                const halfW = Math.round((W - gap) / 2);
+                return [
+                    { id: 0, label: 'Left Side', x: 0, y: 0, w: halfW, h: H },
+                    { id: 1, label: 'Right Side', x: halfW + gap, y: 0, w: W - halfW - gap, h: H }
+                ];
+            }
+            // Single Full Frame
+            return [
+                { id: 0, label: 'Main Photo', x: 0, y: 0, w: W, h: H }
+            ];
+        }
 
-            // If Blur Backdrop Mode is active
+        function drawImageLayer(W, H) {
+            const frames = getLayoutFrames(W, H, config.layout);
+
+            frames.forEach(frame => {
+                const slot = slots[frame.id];
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(frame.x, frame.y, frame.w, frame.h);
+                ctx.clip();
+
+                if (slot && slot.img) {
+                    drawSlotImage(slot, frame);
+                } else {
+                    drawFramePlaceholder(frame);
+                }
+                ctx.restore();
+
+                // Subtle active frame highlight in collage mode
+                if (config.layout !== 'single' && frame.id === activeSlot) {
+                    ctx.save();
+                    ctx.strokeStyle = 'rgba(230, 0, 35, 0.45)';
+                    ctx.lineWidth = 4;
+                    ctx.strokeRect(frame.x + 2, frame.y + 2, frame.w - 4, frame.h - 4);
+                    ctx.restore();
+                }
+            });
+
+            // Draw clean dividers
+            if (config.layout !== 'single' && config.dividerWidth > 0) {
+                ctx.save();
+                ctx.fillStyle = config.dividerColor;
+                if (config.layout === 'split-2') {
+                    const topH = Math.round(H * 0.56);
+                    ctx.fillRect(0, topH, W, config.dividerWidth);
+                } else if (config.layout === 'grid-3') {
+                    const topH = Math.round(H * 0.58);
+                    const halfW = Math.round((W - config.dividerWidth) / 2);
+                    ctx.fillRect(0, topH, W, config.dividerWidth);
+                    ctx.fillRect(halfW, topH, config.dividerWidth, H - topH);
+                } else if (config.layout === 'split-vertical') {
+                    const halfW = Math.round((W - config.dividerWidth) / 2);
+                    ctx.fillRect(halfW, 0, config.dividerWidth, H);
+                }
+                ctx.restore();
+            }
+        }
+
+        function drawSlotImage(slot, frame) {
+            const W = frame.w;
+            const H = frame.h;
+            const imgAspect = slot.img.width / slot.img.height;
+            const frameAspect = W / H;
+
             if (config.fitMode === 'blur') {
                 ctx.save();
                 ctx.filter = 'blur(45px) brightness(0.85)';
-                ctx.drawImage(uploadedImg, -50, -50, W + 100, H + 100);
+                ctx.drawImage(slot.img, frame.x - 20, frame.y - 20, W + 40, H + 40);
                 ctx.restore();
 
-                // Draw sharp contained image on top
                 ctx.save();
                 ctx.filter = getFilterString(config.filter);
                 let drawW, drawH;
-                if (imgAspect > canvasAspect) {
-                    drawW = W * config.zoom;
-                    drawH = (W / imgAspect) * config.zoom;
+                if (imgAspect > frameAspect) {
+                    drawW = W * slot.zoom;
+                    drawH = (W / imgAspect) * slot.zoom;
                 } else {
-                    drawH = H * config.zoom;
-                    drawW = (H * imgAspect) * config.zoom;
+                    drawH = H * slot.zoom;
+                    drawW = (H * imgAspect) * slot.zoom;
                 }
-                const posX = ((W - drawW) / 2) + config.panX;
-                const posY = ((H - drawH) / 2) + config.panY;
-                ctx.drawImage(uploadedImg, posX, posY, drawW, drawH);
+                const posX = frame.x + ((W - drawW) / 2) + slot.panX;
+                const posY = frame.y + ((H - drawH) / 2) + slot.panY;
+                ctx.drawImage(slot.img, posX, posY, drawW, drawH);
                 ctx.restore();
                 return;
             }
 
-            // Standard "Crop to Fill / Cover" Mode
             let baseW, baseH;
-            if (imgAspect > canvasAspect) {
+            if (imgAspect > frameAspect) {
                 baseH = H;
-                baseW = uploadedImg.width * (H / uploadedImg.height);
+                baseW = slot.img.width * (H / slot.img.height);
             } else {
                 baseW = W;
-                baseH = uploadedImg.height * (W / uploadedImg.width);
+                baseH = slot.img.height * (W / slot.img.width);
             }
 
-            const drawW = baseW * config.zoom;
-            const drawH = baseH * config.zoom;
-            const posX = ((W - drawW) / 2) + config.panX;
-            const posY = ((H - drawH) / 2) + config.panY;
+            const drawW = baseW * slot.zoom;
+            const drawH = baseH * slot.zoom;
+            const posX = frame.x + ((W - drawW) / 2) + slot.panX;
+            const posY = frame.y + ((H - drawH) / 2) + slot.panY;
 
             ctx.save();
             ctx.filter = getFilterString(config.filter);
-            ctx.drawImage(uploadedImg, posX, posY, drawW, drawH);
+            ctx.drawImage(slot.img, posX, posY, drawW, drawH);
             ctx.restore();
+        }
+
+        function drawFramePlaceholder(frame) {
+            const grad = ctx.createLinearGradient(frame.x, frame.y, frame.x + frame.w, frame.y + frame.h);
+            grad.addColorStop(0, '#f8fafc');
+            grad.addColorStop(1, '#e2e8f0');
+            ctx.fillStyle = grad;
+            ctx.fillRect(frame.x, frame.y, frame.w, frame.h);
+
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([10, 10]);
+            ctx.strokeRect(frame.x + 16, frame.y + 16, frame.w - 32, frame.h - 32);
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#64748b';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = "bold 28px 'Plus Jakarta Sans', sans-serif";
+            ctx.fillText(`+ Add ${frame.label}`, frame.x + frame.w / 2, frame.y + frame.h / 2 - 12);
+
+            ctx.font = "500 18px 'Inter', sans-serif";
+            ctx.fillStyle = '#94a3b8';
+            ctx.fillText("Click here to upload photo", frame.x + frame.w / 2, frame.y + frame.h / 2 + 22);
         }
 
         function drawGradientScrim(W, H) {
@@ -1332,6 +1761,78 @@
                 ctx.moveTo(saleRight - 2, currentY + 3);
                 ctx.lineTo(saleRight + oldWidth + 4, currentY + 1);
                 ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        
+        function drawRatingBadge(W, H) {
+            if (!config.hasRating || (!config.ratingText && !config.trustText)) return;
+
+            ctx.save();
+            const ratingText = config.ratingText ? config.ratingText.trim() : '';
+            const trustText = config.trustText ? config.trustText.trim() : '';
+
+            ctx.font = "bold 20px 'Plus Jakarta Sans', sans-serif";
+            const rWidth = ratingText ? ctx.measureText(ratingText).width : 0;
+            ctx.font = "600 18px 'Inter', sans-serif";
+            const tWidth = trustText ? ctx.measureText(trustText).width : 0;
+
+            const padX = 22;
+            const badgeW = Math.max(260, rWidth + (trustText ? tWidth + 24 : 0) + (padX * 2));
+            const badgeH = 50;
+
+            let posX = 60;
+            let posY = 60;
+
+            if (config.pricePosition === 'top-left') {
+                posX = W - badgeW - 60;
+            } else {
+                if (config.hasBranding && config.badge) {
+                    posY = 125;
+                }
+            }
+
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+            ctx.shadowBlur = 14;
+            ctx.shadowOffsetY = 4;
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.96)';
+            drawRoundedRect(ctx, posX, posY, badgeW, badgeH, 25);
+            ctx.fill();
+
+            ctx.shadowColor = 'transparent';
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.08)';
+            ctx.stroke();
+
+            let curX = posX + padX;
+            const midY = posY + badgeH / 2 + 1;
+
+            if (ratingText) {
+                ctx.font = "bold 20px 'Plus Jakarta Sans', sans-serif";
+                ctx.fillStyle = '#D97706';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(ratingText, curX, midY);
+                curX += rWidth + 12;
+            }
+
+            if (trustText) {
+                if (ratingText) {
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.beginPath();
+                    ctx.arc(curX, midY, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    curX += 12;
+                }
+
+                ctx.font = "600 18px 'Inter', sans-serif";
+                ctx.fillStyle = '#059669';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(trustText, curX, midY);
             }
 
             ctx.restore();
@@ -1524,7 +2025,8 @@
 
         // --- 1-Click Fast Download ---
         downloadBtn.addEventListener('click', function() {
-            if (!uploadedImg) return;
+            const hasImg = slots.some(s => s && s.img);
+            if (!hasImg) return;
             const dataURL = canvas.toDataURL('image/jpeg', 0.95);
             const a = document.createElement('a');
             a.href = dataURL;

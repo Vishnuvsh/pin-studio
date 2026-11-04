@@ -13,8 +13,10 @@
 ## ✨ Features at a Glance
 
 ### 🛍️ E-Commerce Sales Boosters
+- **Multi-Image Split Collage**: Create viral Pinterest pins with 1-photo, 3-Grid Showcase (Hero Top + 2 Bottom), 2-Split Stack (Top/Bottom), and Side-by-Side (Before & After).
 - **Product Price Badge**: Display sale price (e.g. `₹499`, `$29`), crossed-out original price (`₹999`), and discount pill (`50% OFF`).
 - **4 Badge Styles**: Pinterest Red, Golden Luxury, Dark Onyx, and Clean White Card.
+- **Social Proof & Star Rating Badge**: Add high-trust reviews (`4.9 ★ (1.2k+ sold)`) and trust badges (`✓ Free Cash on Delivery`).
 - **Shop CTA Buttons**: Eye-catching 3D pill buttons (`SHOP NOW ➔`, `BUY NOW 🛍️`, `GRAB 50% OFF ⚡`, `LINK IN BIO 🔗`) with soft glow lighting.
 
 ### 🪄 Smart Description Converter (AI Copy Assistant)
